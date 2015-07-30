@@ -1,0 +1,7 @@
+= 高可用负载均衡集群实践简明教程
+
+High-Availability Loadbalancing Clusters Practice Guide for Beginners
+
+欢迎阅读 高可用负载均衡集群实践简明教程。
+
+您可以在以下地址找到本书的在线版本： https://fifilyu.github.io/halcpgb
