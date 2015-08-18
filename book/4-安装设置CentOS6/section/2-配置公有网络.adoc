@@ -1,0 +1,140 @@
+=== 配置公有网络
+配置对外提供服务的IP地址。
+
+[TIP]
+严格意义上讲，*192.168.0.0/16* 属于私有网络，私有网络的IP无法直接连接互联网，需要公网IP转发。
+本书为演示目的，广义上称 *192.168.0.0/16* 网络为公有网络（公网）， *10.0.0.0/8* 、 *11.0.0.0/8* 、 *12.0.0.0/8* 以及
+ *13.0.0.0/8* 网络为私有网络（内网）。
+
+==== 创建网卡配置文件
+
+[TIP]
+本书假设网卡前缀为常用的eth。根据网卡类型的不同，CentOS会修改网卡前缀为em或eno等等。
+
+include::tip.network.adoc[]
+
+===== 服务器 Server1
+
+IP地址：*[red]#192.168.1.70#*
+
+.网卡eth0
+----
+cat << EOF > /etc/sysconfig/network-scripts/ifcfg-eth0
+DEVICE=eth0
+BOOTPROTO=none
+ONBOOT=yes
+IPADDR=192.168.1.70
+NETMASK=255.255.255.0
+GATEWAY=192.168.1.1
+DNS1=223.5.5.5
+DNS2=223.6.6.6
+EOF
+----
+
+===== 服务器 Server2
+
+IP地址：*[red]#192.168.1.80#*
+
+.网卡eth0
+----
+cat << EOF > /etc/sysconfig/network-scripts/ifcfg-eth0
+DEVICE=eth0
+BOOTPROTO=none
+ONBOOT=yes
+IPADDR=192.168.1.80
+NETMASK=255.255.255.0
+GATEWAY=192.168.1.1
+DNS1=223.5.5.5
+DNS2=223.6.6.6
+EOF
+----
+
+===== 服务器 Server3
+
+IP地址：*[red]#192.168.1.90#*
+
+.网卡eth0
+----
+cat << EOF > /etc/sysconfig/network-scripts/ifcfg-eth0
+DEVICE=eth0
+BOOTPROTO=none
+ONBOOT=yes
+IPADDR=192.168.1.90
+NETMASK=255.255.255.0
+GATEWAY=192.168.1.1
+DNS1=223.5.5.5
+DNS2=223.6.6.6
+EOF
+----
+
+===== 服务器 Server4
+
+IP地址：*[red]#192.168.1.101#*
+
+.网卡eth0
+----
+cat << EOF > /etc/sysconfig/network-scripts/ifcfg-eth0
+DEVICE=eth0
+BOOTPROTO=none
+ONBOOT=yes
+IPADDR=192.168.1.101
+NETMASK=255.255.255.0
+GATEWAY=192.168.1.1
+DNS1=223.5.5.5
+DNS2=223.6.6.6
+EOF
+----
+
+===== 服务器 Server5
+
+IP地址：*[red]#192.168.1.102#*
+
+.网卡eth0
+----
+cat << EOF > /etc/sysconfig/network-scripts/ifcfg-eth0
+DEVICE=eth0
+BOOTPROTO=none
+ONBOOT=yes
+IPADDR=192.168.1.102
+NETMASK=255.255.255.0
+GATEWAY=192.168.1.1
+DNS1=223.5.5.5
+DNS2=223.6.6.6
+EOF
+----
+
+===== 服务器 Server6
+
+IP地址：*[red]#192.168.1.201#*
+
+.网卡eth0
+----
+cat << EOF > /etc/sysconfig/network-scripts/ifcfg-eth0
+DEVICE=eth0
+BOOTPROTO=none
+ONBOOT=yes
+IPADDR=192.168.1.201
+NETMASK=255.255.255.0
+GATEWAY=192.168.1.1
+DNS1=223.5.5.5
+DNS2=223.6.6.6
+EOF
+----
+
+===== 服务器 Server7
+
+IP地址：*[red]#192.168.1.202#*
+
+.网卡eth0
+----
+cat << EOF > /etc/sysconfig/network-scripts/ifcfg-eth0
+DEVICE=eth0
+BOOTPROTO=none
+ONBOOT=yes
+IPADDR=192.168.1.202
+NETMASK=255.255.255.0
+GATEWAY=192.168.1.1
+DNS1=223.5.5.5
+DNS2=223.6.6.6
+EOF
+----

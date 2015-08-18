@@ -1,0 +1,108 @@
+=== 配置基于交换机的内网
+
+include::tip.network.adoc[]
+
+==== 服务器Server1
+
+IP地址：*[red]#10.10.10.70#*
+
+.网卡eth0:lan
+----
+cat << EOF > /etc/sysconfig/network-scripts/ifcfg-eth0:lan
+DEVICE=eth0:lan
+BOOTPROTO=none
+ONBOOT=yes
+IPADDR=10.10.10.70
+NETMASK=255.255.255.0
+EOF
+----
+
+==== 服务器 Server2
+
+IP地址：*[red]#10.10.10.80#*
+
+.网卡eth0:lan
+----
+cat << EOF > /etc/sysconfig/network-scripts/ifcfg-eth0:lan
+DEVICE=eth0:lan
+BOOTPROTO=none
+ONBOOT=yes
+IPADDR=10.10.10.80
+NETMASK=255.255.255.0
+EOF
+----
+
+==== 服务器 Server3
+
+IP地址：*[red]#10.10.10.90#*
+
+.网卡eth0:lan
+----
+cat << EOF > /etc/sysconfig/network-scripts/ifcfg-eth0:lan
+DEVICE=eth0:lan
+BOOTPROTO=none
+ONBOOT=yes
+IPADDR=10.10.10.90
+NETMASK=255.255.255.0
+EOF
+----
+
+==== 服务器 Server4
+
+IP地址：*[red]#10.10.10.101#*
+
+.网卡eth0:lan
+----
+cat << EOF > /etc/sysconfig/network-scripts/ifcfg-eth0:lan
+DEVICE=eth0:lan
+BOOTPROTO=none
+ONBOOT=yes
+IPADDR=10.10.10.101
+NETMASK=255.255.255.0
+EOF
+----
+
+==== 服务器 Server5
+
+IP地址：*[red]#10.10.10.102#*
+
+.网卡eth0:lan
+----
+cat << EOF > /etc/sysconfig/network-scripts/ifcfg-eth0:lan
+DEVICE=eth0:lan
+BOOTPROTO=none
+ONBOOT=yes
+IPADDR=10.10.10.102
+NETMASK=255.255.255.0
+EOF
+----
+
+==== 服务器 Server6
+
+IP地址：*[red]#10.10.10.201#*
+
+.网卡eth0:lan
+----
+cat << EOF > /etc/sysconfig/network-scripts/ifcfg-eth0:lan
+DEVICE=eth0:lan
+BOOTPROTO=none
+ONBOOT=yes
+IPADDR=10.10.10.201
+NETMASK=255.255.255.0
+EOF
+----
+
+==== 服务器 Server7
+
+IP地址：*[red]#10.10.10.202#*
+
+.网卡eth0:lan
+----
+cat << EOF > /etc/sysconfig/network-scripts/ifcfg-eth0:lan
+DEVICE=eth0:lan
+BOOTPROTO=none
+ONBOOT=yes
+IPADDR=10.10.10.202
+NETMASK=255.255.255.0
+EOF
+----

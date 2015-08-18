@@ -1,0 +1,178 @@
+=== 设置
+
+[TIP]
+如果配置错误，被DROP的访问会记录在日志文件 `/var/log/iptables.log` 中。通过日志文件的内容排除错误。
+
+==== Server1&2
+
+[source,bash]
+.Server1&2执行
+----
+#添加系统日志设置，将iptables日志写入/var/log/iptables.log
+echo "kern.warning /var/log/iptables.log" >> /etc/rsyslog.conf
+service rsyslog restart
+
+#清空iptables默认链表规则
+iptables -F
+
+#放行本机网络
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A INPUT -s 10.10.10.70 -j ACCEPT
+iptables -A INPUT -s 10.10.10.80 -j ACCEPT
+
+#放行千兆网线组建的内网网段
+iptables -A INPUT -s 12.12.12.0/24 -j ACCEPT
+
+#允许任何人SSH(22)端口
+iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+
+#允许公网访问本机的HTTP(80)端口
+iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+
+#允许访问本机以外的HTTP(80)、Rsync(873)以及MySQL(3306)端口
+iptables -A INPUT -p tcp --sport 80 -j ACCEPT
+iptables -A INPUT -p tcp --sport 873 -j ACCEPT
+iptables -A INPUT -p tcp --sport 3306 -j ACCEPT
+
+#允许Nginx服务器访问MySQL(3306)端口
+iptables -A INPUT -p tcp -s 10.10.10.201 --dport 3306 -j ACCEPT
+iptables -A INPUT -p tcp -s 10.10.10.202 --dport 3306 -j ACCEPT
+
+#将DROP信息写入日志文件/var/log/iptables.log
+iptables -A INPUT -p tcp -j LOG --log-prefix "*** TCP-INPUT-DROP *** " --log-tcp-options --log-ip-options
+
+#除以上规则外，公网不能访问本机任何TCP端口
+iptables -A INPUT -p tcp -j DROP
+
+#保存iptables规则到默认配置文件
+service iptables save
+----
+
+
+==== Server3
+
+[source,bash]
+.Server3执行
+----
+#添加系统日志设置，将iptables日志写入/var/log/iptables.log
+echo "kern.warning /var/log/iptables.log" >> /etc/rsyslog.conf
+service rsyslog restart
+
+#清空iptables默认链表规则
+iptables -F
+
+#放行本机网络
+iptables -A INPUT -i lo -j ACCEPT 
+iptables -A INPUT -s 10.10.10.201 -j ACCEPT
+iptables -A INPUT -s 10.10.10.202 -j ACCEPT
+
+#放行千兆网线组建的内网网段
+iptables -A INPUT -s 11.11.11.0/24 -j ACCEPT
+iptables -A INPUT -s 12.12.12.0/24 -j ACCEPT
+
+#允许任何人SSH(22)端口
+iptables -A INPUT -p tcp --dport 22 -j ACCEPT 
+
+#允许备份服务器访问Rsync(873)端口
+iptables -A INPUT -p tcp -s 10.10.10.80 --dport 873 -j ACCEPT
+
+#允许访问本机以外的HTTP(80)端口
+iptables -A INPUT -p tcp --sport 80 -j ACCEPT
+
+#将DROP信息写入日志文件/var/log/iptables.log
+iptables -A INPUT -p tcp -j LOG --log-prefix "*** TCP-INPUT-DROP *** " --log-tcp-options --log-ip-options
+
+#除以上规则外，公网不能访问本机任何TCP端口
+iptables -A INPUT -p tcp -j DROP
+
+#保存iptables规则到默认配置文件
+service iptables save
+----
+
+==== Server4&5
+
+[source,bash]
+.Server4&5执行
+----
+#添加系统日志设置，将iptables日志写入/var/log/iptables.log
+echo "kern.warning /var/log/iptables.log" >> /etc/rsyslog.conf
+service rsyslog restart
+
+#清空iptables默认链表规则
+iptables -F
+
+#放行本机网络
+iptables -A INPUT -i lo -j ACCEPT 
+iptables -A INPUT -s 10.10.10.101 -j ACCEPT
+iptables -A INPUT -s 10.10.10.102 -j ACCEPT
+
+#放行千兆网线组建的内网网段
+iptables -A INPUT -s 13.13.13.0/24 -j ACCEPT
+
+#允许任何人SSH(22)端口
+iptables -A INPUT -p tcp --dport 22 -j ACCEPT 
+
+#允许备份服务器访问Rsync(873)端口
+iptables -A INPUT -p tcp -s 10.10.10.80 --dport 873 -j ACCEPT
+
+#允许访问本机以外的HTTP(80)端口
+iptables -A INPUT -p tcp --sport 80 -j ACCEPT
+
+#允许WEB相关的服务器访问MySQL(3306)端口
+iptables -A INPUT -p tcp -s 10.10.10.70 --dport 3306 -j ACCEPT
+iptables -A INPUT -p tcp -s 10.10.10.80 --dport 3306 -j ACCEPT
+iptables -A INPUT -p tcp -s 10.10.10.100 --dport 3306 -j ACCEPT
+iptables -A INPUT -p tcp -s 10.10.10.201 --dport 3306 -j ACCEPT
+iptables -A INPUT -p tcp -s 10.10.10.202 --dport 3306 -j ACCEPT
+
+#将DROP信息写入日志文件/var/log/iptables.log
+iptables -A INPUT -p tcp -j LOG --log-prefix "*** TCP-INPUT-DROP *** " --log-tcp-options --log-ip-options
+
+#除以上规则外，公网不能访问本机任何TCP端口
+iptables -A INPUT -p tcp -j DROP
+
+#保存iptables规则到默认配置文件
+service iptables save
+----
+
+==== Server6&7
+
+[source,bash]
+.Server6&7执行
+----
+#添加系统日志设置，将iptables日志写入/var/log/iptables.log
+echo "kern.warning /var/log/iptables.log" >> /etc/rsyslog.conf
+service rsyslog restart
+
+#清空iptables默认链表规则
+iptables -F
+
+#放行本机网络
+iptables -A INPUT -i lo -j ACCEPT 
+iptables -A INPUT -s 10.10.10.201 -j ACCEPT
+iptables -A INPUT -s 10.10.10.202 -j ACCEPT
+
+#允许任何人SSH(22)端口
+iptables -A INPUT -p tcp --dport 22 -j ACCEPT 
+
+#允许备份服务器访问Rsync(873)端口
+iptables -A INPUT -p tcp -s 10.10.10.80 --dport 873 -j ACCEPT
+
+#禁止访问本机公网IP上监听的HTTP(80)端口，仅允许访问本机内网IP上监听的HTTP(80)端口
+iptables -A INPUT -p tcp -s 192.168.1.200 --dport 80 -j DROP
+iptables -A INPUT -p tcp -d 192.168.1.202 --dport 80 -j DROP
+iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+
+#允许访问本机以外的HTTP(80)和MySQL(3306)端口
+iptables -A INPUT -p tcp --sport 80 -j ACCEPT
+iptables -A INPUT -p tcp --sport 3306 -j ACCEPT
+
+#将DROP信息写入日志文件/var/log/iptables.log
+iptables -A INPUT -p tcp -j LOG --log-prefix "*** TCP-INPUT-DROP *** " --log-tcp-options --log-ip-options
+
+#除以上规则外，公网不能访问本机任何TCP端口
+iptables -A INPUT -p tcp -j DROP
+
+#保存iptables规则到默认配置文件
+service iptables save
+----

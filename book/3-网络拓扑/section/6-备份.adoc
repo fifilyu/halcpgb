@@ -1,0 +1,3 @@
+=== 备份
+
+image::image/6-备份.png[caption="Figure 6: ", title="备份", alt="备份", width="600"]

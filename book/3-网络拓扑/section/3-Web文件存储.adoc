@@ -1,0 +1,3 @@
+=== Web文件存储
+
+image::image/3-Web文件存储.png[caption="Figure 3: ", title="Web文件存储", alt="Web文件存储", width="600"]

@@ -1,0 +1,9 @@
+=== Nginx
+集群中的作用：*[red]#Web 服务器#*
+
+image::image/nginx_logo.png[alt="CentOS", width="200", height="48"]
+
+http://nginx.org[Nginx] 是一个 HTTP、反向代理、邮件代理、TCP代理服务器。很长一段时间里，许多大访问量的俄罗斯网站都运行于 nginx 之上。2015年7月，nginx服务或代理了最繁忙站点中的 22.27%。
+
+Nginx 最初是为俄罗斯访问量第二的 Rambler.ru 开发的。意识到 Ningx 对整个互联网的作用，最后 Nignx 被开源出来。随后 Apache 的垄断地位被颠覆。
+起初，没人想用 C 重写一个 “Apache”，写出来能比 Apache 好吗？

@@ -1,0 +1,16 @@
+=== 安装
+
+在Server2&3&6&7上安装包nfs-utils以及rpcbind
+
+`yum install -y nfs-utils rpcbind`
+
+其中，Server3为NFS服务端，Server2&6&7为NFS客户端。
+
+在Server3设置开机启动
+
+[source,bash]
+.Server3执行
+----
+chkconfig rpcbind on
+chkconfig nfs on
+----

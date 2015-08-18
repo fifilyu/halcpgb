@@ -1,0 +1,20 @@
+== 起步
+
+我们从介绍 Web 集群相关的一些背景知识开始。
+通过本章的学习，您应该了解各个部分在集群中发挥的作用。
+
+include::section/centos.adoc[]
+
+include::section/iptables.adoc[]
+
+include::section/keepalived.adoc[]
+
+include::section/lvs.adoc[]
+
+include::section/mysql.adoc[]
+
+include::section/nfs.adoc[]
+
+include::section/nginx.adoc[]
+
+include::section/rsync.adoc[]

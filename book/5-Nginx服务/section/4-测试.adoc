@@ -1,0 +1,35 @@
+=== 测试
+
+==== 检查80端口
+
+在终端中执行 `ss -t4nlp|grep ':80'`
+
+----
+# ss -t4nlp|grep ':80'
+LISTEN     0      128                       *:80                       *:*      users:(("nginx",20736,6),("nginx",20738,6))
+----
+
+根据输出我们可以看到Nginx已经启动成功。
+
+[TIP]
+netstat命令已经过时，建议使用ss命令代替。
+
+==== 测试访问
+
+在终端中执行 `curl -I localhost`
+
+----
+# curl -I localhost
+HTTP/1.1 200 OK
+Server: nginx/1.8.0
+Date: Tue, 11 Aug 2015 16:54:56 GMT
+Content-Type: text/html
+Content-Length: 612
+Last-Modified: Tue, 21 Apr 2015 15:38:08 GMT
+Connection: keep-alive
+ETag: "55366ee0-264"
+Accept-Ranges: bytes
+----
+
+[TIP]
+当然，你也可以在自己的电脑上，通过浏览器 http://192.168.1.201 或 http://192.168.1.202 测试访问。

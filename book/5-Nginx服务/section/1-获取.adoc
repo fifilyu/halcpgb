@@ -1,0 +1,3 @@
+=== 获取
+
+访问 http://nginx.org/en/linux_packages.html#stable 获取Nginx安装包。

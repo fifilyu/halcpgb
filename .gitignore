@@ -1,0 +1,6 @@
+.git
+image/*
+file/*
+Gemfile.lock
+*.html
+*.pdf

@@ -1,0 +1,10 @@
+=== 配置
+
+开机启动Nginx服务::
+`chkconfig nginx on`
+
+立即启动Nginx服务::
+`service nginx start`
+
+[TIP]
+本书不涉及具体的参数调整，仅仅需要启动Nginx，保证80端口可以访问即可。

@@ -1,0 +1,31 @@
+=== IP地址表
+
+.IP地址表
+[cols="^,^,^,^,^",frame="all",options="header"]
+|==========================
+|类型       |主机名  |网络接口|IP 地址|网络类型
+.4+^.^|Master LVS .4+^.^|Server1 <s|[red]#eth0# <s|[red]#192.168.1.70# s|[red]#Public IP#
+                                    <s|[black]#eth0:lan# <s|[black]#10.10.10.70# s|[black]#Private IP#
+                                    <|eth0:db <|10.10.10.100|Virtual IP
+                                    <|eth0:web <|192.168.1.200|Virtual IP
+.5+^.^|Backup LVS&备份 .5+^.^|Server2 <s|[red]#eth0# <s|[red]#192.168.1.80# s|[red]#Public IP#
+                                        <s|[black]#eth0:lan# <s|[black]#10.10.10.80# s|[black]#Private IP#
+                                        <|eth0:db <|10.10.10.100|Virtual IP
+                                        <|eth0:web <|192.168.1.200|Virtual IP
+                                        <s|[green]#eth1# <s|[green]#12.12.12.80# s|[green]#Private IP#
+.3+^.^|Web文件存储 .3+^.^|Server3 <s|[red]#eth0# <s|[red]#192.168.1.90# s|[red]#Public IP#
+                                    <s|[blue]#eth1# <s|[blue]#11.11.11.90# s|[blue]#Private IP#
+                                    <s|[green]#eth2# <s|[green]#12.12.12.90# s|[green]#Private IP#
+.3+^.^|MySQL1 .3+^.^|Server4 <s|[red]#eth0# <s|[red]#192.168.1.101# s|[red]#Public IP#
+                                    <s|[black]#eth0:lan# <s|[black]#10.10.10.101# s|[black]#Private IP#
+                                    <s|[purple]#eth1# <s|[purple]#13.13.13.101# s|[purple]#Private IP#
+.3+^.^|MySQL2 .3+^.^|Server5 <s|[red]#eth0# <s|[red]#192.168.1.102# s|[red]#Public IP#
+                                <s|[black]#eth0:lan# <s|[black]#10.10.10.102# s|[black]#Private IP#
+                                <s|[purple]#eth1# <s|[purple]#13.13.13.102# s|[purple]#Private IP#
+.3+^.^|Nginx1 .3+^.^|Server6 <s|[red]#eth0# <s|[red]#192.168.1.201# s|[red]#Public IP#
+                                    <s|[black]#eth0:lan# <s|[black]#10.10.10.201# s|[black]#Private IP#
+                                    <s|[blue]#eth1# <s|[blue]#11.11.11.201# s|[blue]#Private IP#
+.3+^.^|Nginx2 .3+^.^|Server7 <s|[red]#eth0# <s|[red]#192.168.1.202# s|[red]#Public IP#
+                                <s|[black]#eth0:lan# <s|[black]#10.10.10.202# s|[black]#Private IP#
+                                <s|[blue]#eth1# <s|[blue]#11.11.11.202# s|[blue]#Private IP#
+|==========================

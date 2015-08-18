@@ -1,0 +1,97 @@
+=== 文档
+
+==== 服务端文档
+
+有两种方法配置NFS服务端
+
+* 手动编辑NFS配置文件/etc/exports
+* 使用命令exportfs，通过命令行配置
+
+===== /etc/exports文件
+
+===== 语法规则
+
+/etc/exports配置的文件系统将按照指定的选项共享到远程主机。此文件遵循以下语法规则：
+
+*  忽略空白行
+*  以井号开始的行为注释
+*  以反斜线续行
+*  每行配置共享一个文件系统
+*  共享的文件系统后面，所有授权主机列表必须以空格跟分隔
+*  每个主机的选项必须直接放在主机标识符之后的圆括号里，主机和第一个圆括号之间不能有任何空格
+
+===== 结构
+
+每行配置遵循以下结构：
+
+`export host(options)`
+
+上述结构采用了以下变量：
+
+export::
+    被共享的目录
+host::
+    目录被共享给指定的主机或网络
+options::
+    被主机使用的选项
+
+可以指定多个主机，并为每个主机指定选项。为了在同一行配置多个的主机(以空格分隔)，每个主机名后都将各自的选项填写在圆括号中，如：
+
+`export host1(options1) host2(options2) host3(options3)`
+
+关于指定主机名的方法，请查阅 "<<hostname_formats,主机名格式>>"。
+
+最简单的/etc/exports文件仅仅指定共享的目录和允许的主机，比如：
+
+./etc/exports文件
+====
+/exported/directory bob.example.com
+====
+
+此时，bob.example.com(主机)能够挂载来自NFS服务端的/exported/directory/。因为此时没有选项被指定，NFS将使用默认设置。
+
+===== 选项
+
+ro(默认值)::
+    允许读取数据。共享的文件系统只读，远程主机不能修改此文件系统上的数据
+rw::
+    允许读写数据。
+sync(默认值)::
+    同步写入。在读写模式下，上一个请求写完数据到硬盘之前，NFS服务端不能回应请求。要启用异步写入，需要指定 `async` 选项
+wdelay(默认值)::
+    假如NFS服务端认为另一个写请求已迫在眉睫，它会延迟写入数据到硬盘。这样能够提升性能，因为此策略能够减少写命令必须访问
+    硬盘的次数。要禁止这个选项，需要指定 `no_wdelay` 选项。 只有 `sync` 选项指定时， `no_wdelay` 才有效
+root_squash(默认值)::
+    这个选项可以防止root用户远程连接(相对于本地)，从而具有root权限。相反，NFS服务端会映射root用户到匿名用户(nfsnobody)。这样有
+    效的“压缩”远程root用户的权利为最低权限的本地用户，防止在远程服务器上出现可能未经授权的写操作
+all_squash::
+    远程用户(包括root)映射为匿名用户(nfsnobody)
+anonuid::
+    远程访问的用户映射为指定的本地用户
+    
+anongid::
+    远程访问的用户组映射为指定的本地用户组
+
+[[hostname_formats,主机名格式]]
+===== 主机名格式
+主机可以为以下形式：
+
+单个机器::
+    完全形式的域名(能够被服务器解析的)，主机名(能够被服务器解析的)或者IP地址
+
+使用通配符指定多个机器::
+    * 使用星号(*)或者问号(?)匹配一个字符串
+    * 通配符不能被用于IP地址
+    * 它们可以在递归DNS查找失败时偶然工作。当在完全形式的域名中指定通配符时，通配符不会包含点(.)。比如，*.example.com
+包括one.example.com，但不包括one.two.example.com.。
+
+IP网络::
+    * 格式a.b.c.d/z，a.b.c.d是网络，z是子网掩码位(比如，192.168.0.0/24)
+    * 格式a.b.c.d/netmask，a.b.c.d是网络，netmask是子网掩码(比如，192.168.100.8/255.255.255.04)
+
+网络组::
+    格式@group-name，group-name表示NIS网络组名称。更多关于NIS的信息，请访问  https://www.freebsd.org/doc/zh_CN.UTF-8/books/handbook/network-nis.html[网络信息服务]
+
+==== 客户端文档
+
+请访问  https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Storage_Administration_Guide/s1-nfs-client-config-options.html[常见的NFS挂载选项]

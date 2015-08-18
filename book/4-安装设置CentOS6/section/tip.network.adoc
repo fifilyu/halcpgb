@@ -1,0 +1,16 @@
+[TIP]
+内网不需要配置网关和DNS。
+
+[TIP]
+====
+按照以下命令操作后，
+
+* 记得重启网络服务 `service network restart`
+* 通过命令 `ip a` ，查看IP配置是否生效
+* 通过命令 `cat /etc/resolv.conf` ，查看DNS配置是否生效。但是，本书推荐直接 `ping qq.com` 看看能否解析出IP地址
+
+PS: 为什么用 `ping qq.com` 代替cat命令？因为打字少啊！
+====
+
+[TIP]
+ifconfig命令已经过时，建议使用ip命令代替。

@@ -1,0 +1,52 @@
+=== 测试
+
+==== 测试Web服务负载均衡
+
+Web访问测试，和之前 <<lvs_test,LVS-测试访问>> 一样。
+
+反复停止Server1/2上的Keepalived服务，观察VIP地址192.168.1.200以及10.10.10.100是否在两台服务器之间来回切换。
+反复停止Server6/7上的Nginx服务，观察访问 http://192.168.1.200 会有什么变化。
+
+[TIP]
+====
+停止Nginx服务::
+    service nginx stop
+====
+
+==== 测试数据库服务高可用
+
+在Server6&7上，执行
+
+`mysql -h 10.10.10.100 -uroot -prootpassword -e "SELECT @@hostname hostname;"`
+
+如果成功，则能看到 *Server5* 字样。
+
+.输出
+[source,console]
+----
+# mysql -h 10.10.10.100 -uroot -prootpassword -e "SELECT @@hostname hostname;"
++----------+
+| hostname |
++----------+
+| Server5  |
++----------+
+----
+
+此时，如果停止Server5上的Keepalived服务，执行同样的命令，会看到 *Server4* 字样。表示MySQL高可用配置成功。
+
+.输出
+[source,console]
+----
+# mysql -h 10.10.10.100 -uroot -prootpassword -e "SELECT @@hostname hostname;"
++----------+
+| hostname |
++----------+
+| Server4  |
++----------+
+----
+
+[TIP]
+====
+停止MySQL服务::
+    service mysqld stop
+====

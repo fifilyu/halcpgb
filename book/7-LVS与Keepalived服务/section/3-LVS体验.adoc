@@ -1,0 +1,178 @@
+=== LVS体验
+
+本节仅仅体验如何使用LVS。此时不会修改任何系统配置文件，所有设置都是重启后即被还原。
+
+==== Director(Server1&2)
+
+[source, bash]
+----
+ip addr add 192.168.1.200/24 broadcast 192.168.1.255 dev eth0
+
+ipvsadm -A -t 192.168.1.200:80 -s rr
+ipvsadm -a -t 192.168.1.200:80 -r 10.10.10.201 -g
+ipvsadm -a -t 192.168.1.200:80 -r 10.10.10.202 -g
+----
+
+通过命令 `ipvsadm -ln` 查看增加的LVS设置
+
+----
+# ipvsadm -ln
+IP Virtual Server version 1.2.1 (size=4096)
+Prot LocalAddress:Port Scheduler Flags
+  -> RemoteAddress:Port           Forward Weight ActiveConn InActConn
+TCP  192.168.1.200:80 rr
+  -> 10.10.10.201:80              Route   1      0          0         
+  -> 10.10.10.202:80              Route   1      0          0  
+----
+
+===== 说明
+ip addr add 192.168.1.200/24 broadcast 192.168.1.255 dev eth0::
+    增加192.168.1.200到网卡eth0
+ipvsadm -A -t 192.168.1.200:80 -s rr::
+* -A 增加虚拟服务器
+* -t 虚拟服务地址[:端口]
+* -s 负载调度算法，rr表示轮叫
+ipvsadm -a -t 192.168.1.200:80 -r 10.10.10.201 -g::
+* -a 增加真实服务
+* -r 虚拟服务地址
+* -g LVS工作模式：VS/DR
+
+更多ipvsadm信息，请 `ipvsadm --help` 查看
+
+==== Real Server(Server6&7)
+
+[source, bash]
+----
+ip addr add 192.168.1.200/32 dev lo
+ip route add 192.168.1.200/32 dev lo
+
+sysctl -w net.ipv4.conf.lo.arp_ignore=1
+sysctl -w net.ipv4.conf.lo.arp_announce=2
+sysctl -w net.ipv4.conf.all.arp_ignore=1
+sysctl -w net.ipv4.conf.all.arp_announce=2
+----
+
+===== 说明
+ip addr add 192.168.1.200/32 dev lo::
+    增加192.168.1.200到网卡lo
+ip route add 192.168.1.200/32 dev lo::
+    增加192.168.1.200路由
+`arp_ignore` 和 `arp_announce`::
+    使真实服务器不回应网卡lo以外的arp包
+
+[TIP]
+`*.arp_ignore` 和 `all.arp_ignore` 值不同时，取值最大的值生效。
+lo.arp_ignore=0,all.arp_ignore=1，生效的是1。所以，网卡和all必须同时设置。
+sysctl所有参数的取值模式都是这样。
+
+===== 参数文档
+
+.arp_announce - INTEGER
+----
+Define different restriction levels for announcing the local source IP address from IP packets in ARP requests sent on interface:
+
+0 - (default) Use any local address, configured on any interface
+
+1 - Try to avoid local addresses that are not in the target's subnet for this interface. This mode is useful when target hosts reachable via this interface require the source IP address in ARP requests to be part of their logical network configured on the receiving interface. When we generate the request we will check all our subnets that include the target IP and will preserve the source address if it is from such subnet. If there is no such subnet we select source address according to the rules for level 2.
+
+2 - Always use the best local address for this target. In this mode we ignore the source address in the IP packet and try to select local address that we prefer for talks with the target host. Such local address is selected by looking for primary IP addresses on all our subnets on the outgoing interface that include the target IP address. If no suitable local address is found we select the first local address. we have on the outgoing interface or on all other interfaces, with the hope we will receive reply for our request and even sometimes no matter the source IP address we announce.
+
+The max value from conf/{all,interface}/arp_announce is used.
+
+Increasing the restriction level gives more chance for receiving answer from the resolved target while decreasing the level announces more valid sender's information.
+----
+
+.arp_ignore - INTEGER
+----
+Define different modes for sending replies in response to received ARP requests that resolve local target IP addresses:
+
+0 - (default): reply for any local target IP address, configured on any interface
+
+1 - reply only if the target IP address is local address configured on the incoming interface
+
+2 - reply only if the target IP address is local address configured on the incoming interface and both with the sender's IP address are part from same subnet on this interface
+
+3 - do not reply for local addresses configured with scope host, only resolutions for global and link addresses are replied
+
+4-7 - reserved
+
+8 - do not reply for all local addresses
+
+The max value from conf/{all,interface}/arp_ignore is used when ARP request is received on the {interface}
+----
+
+.rp_filter - INTEGER
+----
+0 - No source validation.
+
+1 - Strict mode as defined in RFC3704 Strict Reverse Path Each incoming packet is tested against the FIB and if the interface is not the best reverse path the packet check will fail. By default failed packets are discarded.
+    
+2 - Loose mode as defined in RFC3704 Loose Reverse Path Each incoming packet's source address is also tested against the FIB and if the source address is not reachable via any interface the packet check will fail.
+
+Current recommended practice in RFC3704 is to enable strict mode to prevent IP spoofing from DDos attacks. If using asymmetric routing or other complicated routing, then loose mode is recommended.
+
+The max value from conf/{all,interface}/rp_filter is used when doing source validation on the {interface}.
+
+Default value is 0. Note that some distributions enable it in startup scripts.
+----
+
+==== 测试
+
+===== 创建测试页面
+
+[source, bash]
+----
+html_page=/usr/share/nginx/html/index.html
+ip_addr=`ip a|grep '10.10.10'|awk '{print $2}'|awk -F'/' '{print $1}'`
+
+echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8">' >$html_page
+echo "这个是一个测试页面。<br>">>$html_page
+echo "你看到内容来自 Real Server: $ip_addr" >>$html_page
+----
+
+[[lvs_test,LVS-测试访问]]
+
+===== 测试访问
+
+在浏览器里面访问 http://192.168.1.200 。
+我们有两台Real Server，应该有的效果是每次刷新网页，会显示不同的内容。
+
+[TIP]
+为了测试的准确性，请直接使用 *[red]#Ctrl+F5强制刷新#* 网页，这样浏览器才不会显示缓存的内容。
+
+.输出
+----
+这个是一个测试页面。
+你看到内容来自 Real Server: 10.10.10.201
+----
+
+.输出
+----
+这个是一个测试页面。
+你看到内容来自 Real Server: 10.10.10.202
+----
+
+通过命令 `ipvsadm -ln` 查看访问分配情况
+
+----
+# ipvsadm -ln
+IP Virtual Server version 1.2.1 (size=4096)
+Prot LocalAddress:Port Scheduler Flags
+  -> RemoteAddress:Port           Forward Weight ActiveConn InActConn
+TCP  192.168.1.200:80 rr
+  -> 10.10.10.201:80              Route   1      1          2         
+  -> 10.10.10.202:80              Route   1      0          2
+----
+
+ActiveConn::
+    活动连接数,也就是TCP连接状态的ESTABLISHED
+InActConn::
+    除了状态是ESTABLISHED的TCP连接
+
+当LVS配置成功后，不断的访问 `ActiveConn` 和 `InActConn` 会持续变化。
+两个值都为0时，说明LVS配置出现错误。
+
+
+==== 总结
+
+本章只是为后面Keepalived的学习做一些铺垫。熟悉LVS原理和使用后，更加容易理解Keepalived。

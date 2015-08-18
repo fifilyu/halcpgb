@@ -1,0 +1,127 @@
+=== 设置备份
+
+[TIP]
+更多关于rsyncd.conf的信息，请访问 https://download.samba.org/pub/rsync/rsyncd.conf.html[Manual page rsyncd.conf] 。
+
+==== NFS存储备份源
+
+* 复制 http://fifilyu.github.io/halcpgb/file/Server3.rsyncd.conf[file/Server3.rsyncd.conf] 到Server3的 `/etc` 目录
+
+[source,bash]
+.Server3执行
+----
+rsync --daemon
+echo "/usr/bin/rsync --daemon" >>/etc/rc.local
+----
+
+==== Nginx文件备份源
+
+[TIP]
+假设所有的动态网页文件全部存放在`/data`目录。
+
+* 复制 http://fifilyu.github.io/halcpgb/file/Server7.rsyncd.conf[file/Server7.rsyncd.conf] 到Server7的 `/etc` 目录。
+
+[source,bash]
+.Server7执行
+----
+rsync --daemon
+echo "/usr/bin/rsync --daemon" >>/etc/rc.local
+----
+
+==== MySQL冷备份源
+
+* 复制 http://fifilyu.github.io/halcpgb/file/Server5.rsyncd.conf[file/Server5.rsyncd.conf] 到Server5的 `/etc` 目录
+* 复制 http://fifilyu.github.io/halcpgb/file/Server5.bak_db_dump.sh[file/Server5.bak_db_dump.sh] 到Server5的 `/opt` 目录
+* 复制 http://fifilyu.github.io/halcpgb/file/Server5.bak_db_binlog.sh[file/Server5.bak_db_binlog.sh] 到Server5的 `/opt` 目录
+
+[source,bash]
+.Server5执行
+----
+chmod 700 /opt/bak_db_dump.sh /opt/bak_db_binlog.sh
+
+rsync --daemon
+echo "/usr/bin/rsync --daemon" >>/etc/rc.local
+
+# bak_db_binlog.sh必须在bak_db_dump.sh之前运行
+echo "1 1 * * * /bin/sh /opt/bak_db_binlog.sh" >>/var/spool/cron/root
+
+echo "1 2 * * 0 /bin/sh /opt/bak_db_dump.sh" >>/var/spool/cron/root
+----
+
+==== 备份客户端
+
+* 复制 http://fifilyu.github.io/halcpgb/file/Server2.rsync_all_bak.sh[file/Server2.rsync_all_bak.sh] 到Server2的 `/opt` 目录
+
+[source,bash]
+.Server2执行
+----
+chmod 700 /opt/rsync_all_bak.sh
+
+echo "1 5 * * * /bin/sh /opt/rsync_all_bak.sh" >>/var/spool/cron/root
+----
+
+==== 确认设置
+
+===== Rsync服务
+
+* 检查Rsync服务是否成功启动
+
+[source,bash]
+.Server3&5&7执行
+----
+ss -lpn|grep rsync
+----
+
+[source,console]
+.Server3输出
+----
+# ss -lpn|grep rsync
+LISTEN     0      5               12.12.12.90:873                      *:*      users:(("rsync",1573,4))
+----
+
+[source,console]
+.Server5输出
+----
+# ss -lpn|grep rsync
+LISTEN     0      5               10.10.10.102:873                      *:*      users:(("rsync",1560,4))
+----
+
+[source,console]
+.Server7输出
+----
+# ss -lpn|grep rsync
+LISTEN     0      5               10.10.10.202:873                      *:*      users:(("rsync",1233,4))
+----
+
+===== 计划任务
+
+* 检查MySQL服务器定时备份是否设置
+
+[source,bash]
+.Server5执行
+----
+crontab -l|egrep '(bak_db_binlog.sh)|(bak_db_dump.sh)'
+----
+
+[source,console]
+.Server5输出
+----
+# crontab -l|egrep '(bak_db_binlog.sh)|(bak_db_dump.sh)'
+1 1 * * * /bin/sh /opt/bak_db_binlog.sh
+1 2 * * 0 /bin/sh /opt/bak_db_dump.sh
+----
+
+* 检查备份服务器定时备份是否设置
+
+[source,bash]
+.Server2执行
+----
+crontab -l|egrep rsync_all_bak.sh
+----
+
+[source,console]
+.Server2输出
+----
+# crontab -l|egrep rsync_all_bak.sh
+1 5 * * * /bin/sh /opt/rsync_all_bak.sh
+----

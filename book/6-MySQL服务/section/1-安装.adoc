@@ -1,0 +1,8 @@
+=== 安装
+Server4&5 分别安装并设置开机启动。
+
+`yum install -y mysql mysql-server`
+
+设置开机启动MySQL服务
+
+`chkconfig mysqld on`

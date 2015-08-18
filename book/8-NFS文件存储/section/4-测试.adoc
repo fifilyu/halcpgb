@@ -1,0 +1,89 @@
+=== 测试
+
+==== 检查挂载
+
+在Server2&6&7上执行 `df -h|grep '/nfs'`
+
+[source,console]
+.Server2输出
+----
+# df -h|grep '/nfs'
+12.12.12.90:/data  1.4T   70M  1.3T   1% /nfs
+----
+
+[source,console]
+.Server6&7输出
+----
+# df -h|grep '/nfs'
+11.11.11.90:/data  1.4T   70M  1.3T   1% /nfs
+----
+
+看到/nfs，则表示已经挂载成功。
+
+==== 读写文件
+
+[source,bash]
+.Server2&6&7执行
+----
+dd if=/dev/zero of=/nfs/`hostname`.file bs=1024 count=10000
+----
+
+[TIP]
+"bs=1024 count=10000" 表示建立10M大小的空文件。
+为了测试千兆网线的性能，可以修改为"bs=1024 count=1000000"，建立1G的文件。
+在建立完毕后，会显示"xxx MB/秒"的字样，基本可以确定网线速度。
+
+[source,console]
+.Server2输出
+----
+# dd if=/dev/zero of=/nfs/`hostname`.file bs=1024 count=10000
+记录了10000+0 的读入
+记录了10000+0 的写出
+10240000字节(10 MB)已复制，0.169929 秒，60.3 MB/秒
+----
+
+[source,console]
+.Server6输出
+----
+# dd if=/dev/zero of=/nfs/`hostname`.file bs=1024 count=10000
+记录了10000+0 的读入
+记录了10000+0 的写出
+10240000字节(10 MB)已复制，0.372033 秒，27.5 MB/秒
+----
+
+[source,console]
+.Server7输出
+----
+# dd if=/dev/zero of=/nfs/`hostname`.file bs=1024 count=10000
+记录了10000+0 的读入
+记录了10000+0 的写出
+10240000字节(10 MB)已复制，0.602732 秒，17.0 MB/秒
+----
+
+[TIP]
+====
+因为本书测试集群是在虚拟机上测试的，显示的文件读写速度和真实集群是不一致的。
+
+虚拟机是"60.3 MB/秒"、"27.5 MB/秒"或"17.0 MB/秒"，而真实集群(千兆网线)则会是"100.0 MB/秒"、"120.0 MB/秒"或"125.0 MB/秒"
+等。
+
+千兆网线传输文件的理论值是1000/8=125MB/秒。
+====
+
+最终，Server3的/data目录和Server2&6&7的/nfs目录会显示同样的内容。
+
+[source,console]
+.Server3输出
+----
+# ls /data
+Server2.file  Server6.file  Server7.file  lost+found
+----
+
+[source,console]
+.Server2&6&7输出
+----
+# ls /nfs
+lost+found  Server2.file  Server6.file  Server7.file
+----
+
+至此，已经测试完毕。

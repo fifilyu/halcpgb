@@ -1,0 +1,5 @@
+=== 安装
+
+在Server1&2上安装包ipvsadm以及keepalived
+
+`yum install -y ipvsadm keepalived`

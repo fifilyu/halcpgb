@@ -1,0 +1,15 @@
+=== MySQL
+集群中的作用：*[red]#数据库#*
+
+image::image/mysql_logo.png[MySQL]
+
+http://www.mysql.com[MySQL] 是一个关系型数据库管理系统，由瑞典 MySQL AB 公司开发，目前属于 Oracle 公司。
+体积小、使用简单、容易维护、高性能、成熟稳定以及开放源码等特点使 MySQL 成为大多数人的首选。
+特别是 Linux + Apache/Nginx + MySQL + PHP (LAMP/LNMP) 这样的组合，突出了高性能和快速开发的优势，
+使 MySQL 应用更加广泛。
+
+凡是需要数据库的地方，都可以看到 MySQL的身影。比如，阿里(淘宝、天猫)、亚马逊、YouTube、Facebook、Google等等。
+其中，阿里、亚马逊、Facebook、Google等企业甚至修改 MySQL 代码以支撑自身的应用需求。
+
+
+MySQL软件采用了双授权政策，它分为社区版和商业版。

@@ -1,0 +1,94 @@
+=== Keepalived环境配置
+
+==== Keepalived(Server1&2)
+
+[source, bash]
+----
+echo "/sbin/service keepalived stop" >/opt/stop_keepalived.sh
+echo "/sbin/service keepalived status|grep '(pid ' || /sbin/service keepalived start" >/opt/check_keepalived.sh
+chmod +x /opt/stop_keepalived.sh /opt/check_keepalived.sh
+
+#增加计划任务，每分钟执行一次脚本。当Keepalived服务停止时，该脚本会启动服务
+#此任务与Keepalived配置文件中使用/opt/stop_keepalived.sh脚本结合起来，组成了一个启动和停止服务的环路。
+#配合实现MySQL的高可用框架。
+echo "*/1 * * * * /bin/sh /opt/check_keepalived.sh >/dev/null" >> /var/spool/cron/root
+
+chkconfig keepalived on
+service keepalived start
+
+ipvsadm -ln
+----
+
+
+[TIP]
+====
+当服务器(Server1/2)的Keepalived(vrrp_instance)为Master状态时，无法访问以下地址：
+
+* 192.168.1.200的80端口
+* 10.10.10.100的3306端口
+
+细心的话，会发现我们使用Keepalived对80端口和3306端口做了高可用和负载均衡。
+
+也就是说，Keepavelid将VIP绑定到网卡上时，本机无法访问VIP+Keepalived监控的端口。
+====
+
+
+==== Real Server
+
+===== Server4&5
+
+[source, bash]
+----
+cat << EOF > /etc/sysconfig/network-scripts/ifcfg-lo:vip
+DEVICE=lo:vip
+BOOTPROTO=none
+IPADDR=10.10.10.100
+NETMASK=255.255.255.255
+EOF
+
+cat << EOF > /etc/sysconfig/network-scripts/route-lo
+10.10.10.100/32 dev lo
+EOF
+
+#当前系统生效
+ip addr add 10.10.10.100/32 dev lo
+ip route add 10.10.10.1000/32 dev lo
+
+cat <<EOF >>/etc/sysctl.conf
+net.ipv4.conf.lo.arp_ignore = 1
+net.ipv4.conf.lo.arp_announce = 2
+net.ipv4.conf.all.arp_ignore = 1
+net.ipv4.conf.all.arp_announce = 2
+EOF
+
+sysctl -p
+----
+
+===== Server6&7
+
+[source, bash]
+----
+cat << EOF > /etc/sysconfig/network-scripts/ifcfg-lo:vip
+DEVICE=lo:vip
+BOOTPROTO=none
+IPADDR=192.168.1.200
+NETMASK=255.255.255.255
+EOF
+
+cat << EOF > /etc/sysconfig/network-scripts/route-lo
+192.168.1.200/32 dev lo
+EOF
+
+#当前系统生效
+ip addr add 192.168.1.200/32 dev lo
+ip route add 192.168.1.200/32 dev lo
+
+cat <<EOF >>/etc/sysctl.conf
+net.ipv4.conf.lo.arp_ignore = 1
+net.ipv4.conf.lo.arp_announce = 2
+net.ipv4.conf.all.arp_ignore = 1
+net.ipv4.conf.all.arp_announce = 2
+EOF
+
+sysctl -p
+----

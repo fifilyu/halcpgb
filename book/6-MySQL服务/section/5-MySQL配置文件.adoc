@@ -1,0 +1,95 @@
+=== MySQL配置文件
+
+直接将以下内容复制到终端执行即可生成MySQL配置文件。
+
+[TIP]
+====
+sync_binlog，innodb_flush_log_at_trx_commit，innodb_support_xa三个选项都是出于安全目的设置的，不是复制的必须选项。
+如果没设置的话，一旦主服务器宕机，数据可能来不及写入磁盘，从而导致从服务器在复制过程中出现类似下面的错误：
+
+    Client requested master to start replication from impossible position
+
+因为日志数据已经丢失了。
+所以此类问题基本上不能处理，只能重新安装同步从服务器。
+====
+
+==== Server4 /etc/my.cnf
+
+[source, bash]
+----
+cat << EOF >/etc/my.cnf
+[mysqld]
+datadir=/data/mysql
+socket=/var/lib/mysql/mysql.sock
+user=mysql
+# Disabling symbolic-links is recommended to prevent assorted security risks
+symbolic-links=0
+
+#跳过主机名解析，加快MySQL远程访问速度
+skip-name-resolve
+max_allowed_packet = 100M
+server-id=1
+log_bin=/data2/mysql_binlogs/mysql-bin.log
+
+relay_log=/data2/mysql_binlogs/mysql-relay-bin
+#主-主模式，两个MySQL服务器中，其中一个宕机。当恢复正常时，主-主之间会相互进行同步，可能出现死锁和IO问题。所以，其中一个
+MySQL服务器默认不启动slave服务。
+skip_slave_start
+# 让从服务器记录日志，有助于在必要时把从切换成主。
+log_slave_updates = 1
+
+sync_binlog=1
+innodb_flush_log_at_trx_commit=1
+innodb_support_xa=1
+
+#解决自动增长的列冲突
+auto_increment_increment=2
+auto_increment_offset=1
+
+[mysqld_safe]
+log-error=/var/log/mysqld.log
+pid-file=/var/run/mysqld/mysqld.pid
+EOF
+----
+
+====  Server5 /etc/my.cnf
+
+[source, bash]
+----
+cat << EOF >/etc/my.cnf
+[mysqld]
+datadir=/data/mysql
+socket=/var/lib/mysql/mysql.sock
+user=mysql
+# Disabling symbolic-links is recommended to prevent assorted security risks
+symbolic-links=0
+
+#跳过主机名解析，加快MySQL远程访问速度
+skip-name-resolve
+max_allowed_packet = 100M
+server-id=2
+log_bin=/data2/mysql_binlogs/mysql-bin.log
+
+relay_log=/data2/mysql_binlogs/mysql-relay-bin
+# 让从服务器记录日志，有助于在必要时把从切换成主。
+log_slave_updates = 1
+
+sync_binlog=1
+innodb_flush_log_at_trx_commit=1
+innodb_support_xa=1
+
+#解决自动增长的列冲突
+auto_increment_increment=2
+auto_increment_offset=1
+
+[mysqld_safe]
+log-error=/var/log/mysqld.log
+pid-file=/var/run/mysqld/mysqld.pid
+EOF
+----
+
+==== 重启MySQL服务
+
+重启MySQL服务，使配置生效
+
+`service mysqld restart`

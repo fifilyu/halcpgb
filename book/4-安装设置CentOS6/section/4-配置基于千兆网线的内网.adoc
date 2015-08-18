@@ -1,0 +1,125 @@
+=== 配置基于千兆网线的内网
+
+[TIP]
+***[red]#为什么又看到这个提示？因为......重要的事情说三遍。#***
+
+include::tip.network.adoc[]
+
+==== 配置NFS存储内网
+
+Server3 作为NFS服务端，Server2/6/7 作为NFS客户端。Server2/3之间，Server3/6/7之间使用千兆网线直连，需要配置各自的内网。
+
+Server2/3::
+    12.12.12.0/24
+Server3/6/7::
+    11.11.11.0/24
+
+===== 服务器 Server2
+
+IP地址：*[red]#12.12.12.80#*
+
+.网卡eth1
+----
+cat << EOF > /etc/sysconfig/network-scripts/ifcfg-eth1
+DEVICE=eth1
+BOOTPROTO=none
+ONBOOT=yes
+IPADDR=12.12.12.80
+NETMASK=255.255.255.0
+EOF
+----
+
+===== 服务器 Server3
+
+IP地址：
+
+* *[red]#11.11.11.90#*
+* *[red]#12.12.12.90#*
+
+.网卡eth1
+----
+cat << EOF > /etc/sysconfig/network-scripts/ifcfg-eth1
+DEVICE=eth1
+BOOTPROTO=none
+ONBOOT=yes
+IPADDR=11.11.11.90
+NETMASK=255.255.255.0
+EOF
+----
+
+.网卡eth2
+----
+cat << EOF > /etc/sysconfig/network-scripts/ifcfg-eth2
+DEVICE=eth2
+BOOTPROTO=none
+ONBOOT=yes
+IPADDR=12.12.12.90
+NETMASK=255.255.255.0
+EOF
+----
+
+===== 服务器 Server6
+
+IP地址：*[red]#11.11.11.201#*
+
+.网卡eth1
+----
+cat << EOF > /etc/sysconfig/network-scripts/ifcfg-eth1
+DEVICE=eth1
+BOOTPROTO=none
+ONBOOT=yes
+IPADDR=11.11.11.201
+NETMASK=255.255.255.0
+EOF
+----
+
+
+===== 服务器 Server7
+
+IP地址：*[red]#11.11.11.202#*
+
+.网卡eth1
+----
+cat << EOF > /etc/sysconfig/network-scripts/ifcfg-eth1
+DEVICE=eth1
+BOOTPROTO=none
+ONBOOT=yes
+IPADDR=11.11.11.202
+NETMASK=255.255.255.0
+EOF
+----
+
+==== 配置MySQL内网
+
+Server4/5 都是MySQL服务器，使用千兆网线直连在第二个网卡。
+
+===== 服务器 Server4
+
+IP地址：*[red]#13.13.13.101#*
+
+.网卡eth1
+----
+cat << EOF > /etc/sysconfig/network-scripts/ifcfg-eth1
+DEVICE=eth1
+BOOTPROTO=none
+ONBOOT=yes
+IPADDR=13.13.13.101
+NETMASK=255.255.255.0
+EOF
+----
+
+
+===== 服务器 Server5
+
+IP地址：*[red]#13.13.13.102#*
+
+.网卡eth1
+----
+cat << EOF > /etc/sysconfig/network-scripts/ifcfg-eth1
+DEVICE=eth1
+BOOTPROTO=none
+ONBOOT=yes
+IPADDR=13.13.13.102
+NETMASK=255.255.255.0
+EOF
+----

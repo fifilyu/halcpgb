@@ -1,0 +1,15 @@
+== MySQL服务
+
+在Server4/5上，分别安装MySQL并测试。
+
+include::section/1-安装.adoc[]
+
+include::section/2-配置.adoc[]
+
+include::section/3-测试.adoc[]
+
+include::section/4-常见的复制模式.adoc[]
+
+include::section/5-MySQL配置文件.adoc[]
+
+include::section/6-主主复制.adoc[]

@@ -1,0 +1,33 @@
+=== 使用备份
+
+[TIP]
+整个恢复过程看似简单，但实际操作会问题多多。限于篇幅，本书没有详细解读。
+
+[WARNING]
+在生产服务器上，需要从备份数据恢复时，必须在专业人士的协助下操作，或由专业人士直接操作。操作前，一定要备份当前数据避免"次生灾害"。
+
+==== 恢复MySQL备份
+
+MySQL备份是导出(mysqldump)所有MySQL数据库数据为SQL文件，加上binlog日志来实现的。比如操作失误删除部分数据，要从备份恢复。请按照以下步骤操作：
+
+. 备份当前MySQL的所有数据(通过mysqldump导出为SQL文件或者直接备份MySQL数据库物理文件)
+. 修改当前MySQL服务器的配置文件my.cnf，禁用binlog，并重启MySQL
+. 关闭所有主从复制
+. 使用 `scp` 或 `rsync` 命令，将SQL文件传输到MySQL服务器，然后执行 `mysql -uroot -prootpassword < 备份文件名.sql` (导入时间和备份文件的大小成正比)
+. 使用 `mysqlbinlog 日志文件1 日志文件2 ... 日志文件N |mysql -uroot -prootpassword` ，按照日志回滚数据
+. 日志回滚完毕后，启用binlog参数，重启MySQL，最后启动主从复制
+
+以上步骤并非标准，需要根据实际情况调整。
+
+[TIP]
+更多关于binlog解释，请访问 https://dev.mysql.com/doc/refman/5.0/en/binary-log.html[The Binary Log]
+
+==== 恢复Web数据
+
+Web数据备份包括NFS储存文件和Nginx服务器文件。按照以下步骤操作：
+
+. 停止所有Web相关的服务，包括Nginx、LVS以及Keepalived等等，使服务器处于完全空闲状态
+. 使用 `rsync` 命令，将文件从备份服务器传输到NFS储存服务器或Nginx服务器。比如NFS服务的 `/data/image` 目录丢失部分图片文件，直接使用 `rsync` 将备份服务器的 `/data/backup/nfs/source/image` 目录增量同步丢失的文件到NFS服务的 `/data/image` 目录即可
+. 启动所有Web相关服务
+
+以上步骤并非标准，需要根据实际情况调整。

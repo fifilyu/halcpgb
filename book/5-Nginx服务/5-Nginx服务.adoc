@@ -1,0 +1,17 @@
+== Nginx服务
+
+在Server3上，安装Nginx。不需要配置和测试。
+
+[TIP]
+仅仅是为了使系统用户nginx存在。NFS服务器共享文件给Nginx服务器使用，而NFS共享的目录对系统用户nginx来说是可读写的。
+需要保证这些服务器上都存在系统用户nginx。
+
+在Server6/7上，分别安装Nginx并测试。
+
+include::section/1-获取.adoc[]
+
+include::section/2-安装.adoc[]
+
+include::section/3-配置.adoc[]
+
+include::section/4-测试.adoc[]

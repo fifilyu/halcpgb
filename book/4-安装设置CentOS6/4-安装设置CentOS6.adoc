@@ -1,0 +1,11 @@
+== 安装设置CentOS6
+
+集群服务是网络服务的一个子集，在一切开始以前，需要先准备好网络。
+
+include::section/1-安装CentOS6.adoc[]
+
+include::section/2-配置公有网络.adoc[]
+
+include::section/3-配置基于交换机的内网.adoc[]
+
+include::section/4-配置基于千兆网线的内网.adoc[]

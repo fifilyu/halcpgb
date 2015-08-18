@@ -1,0 +1,29 @@
+= 高可用负载均衡集群实践简明教程
+
+:doctype:   book
+:docinfo:
+:toc: left
+:numbered:
+:toclevels: 2
+
+include::book/前言.adoc[]
+
+include::book/1-介绍/1-介绍.adoc[]
+
+include::book/2-服务器与规划/2-服务器与规划.adoc[]
+
+include::book/3-网络拓扑/3-网络拓扑.adoc[]
+
+include::book/4-安装设置CentOS6/4-安装设置CentOS6.adoc[]
+
+include::book/5-Nginx服务/5-Nginx服务.adoc[]
+
+include::book/6-MySQL服务/6-MySQL服务.adoc[]
+
+include::book/7-LVS与Keepalived服务/7-LVS与Keepalived服务.adoc[]
+
+include::book/8-NFS文件存储/8-NFS文件存储.adoc[]
+
+include::book/9-备份/9-备份.adoc[]
+
+include::book/10-防火墙/10-防火墙.adoc[]

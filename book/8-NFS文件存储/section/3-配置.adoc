@@ -1,0 +1,100 @@
+=== 配置
+
+==== 服务端(Server3)
+
+[source,bash]
+.Server3执行
+----
+chown -R nginx:nginx /data
+uid=`id -u nginx`
+gid=`id -g nginx`
+cat << EOF > /etc/exports
+/data 11.11.11.0/24(rw,sync,all_squash,anonuid=$uid,anongid=$gid) 12.12.12.0/24(rw,sync,all_squash,anonuid=$uid,anongid=$gid)
+EOF
+
+service rpcbind start
+service nfs start
+----
+
+显示NFS服务端的共享列表
+
+[source,console]
+.Server3输出
+---
+# showmount -e
+Export list for Server3:
+/data 12.12.12.0/24,11.11.11.0/24
+---
+
+显示以上结果，表示成功。
+
+==== Server2客户端
+
+显示NFS服务端的共享列表
+
+[source,console]
+.Server2输出
+----
+# showmount -e 12.12.12.90
+Export list for 12.12.12.90:
+/data 12.12.12.0/24,11.11.11.0/24
+----
+
+挂载NFS共享目录/data到本地/nfs
+
+[source,bash]
+.Server2执行
+----
+mkdir /nfs
+echo "12.12.12.90:/data  /nfs   nfs4      noatime,nolock,intr,bg,tcp     0 0" >>/etc/fstab
+mount -a
+----
+
+[TIP]
+====
+最重要的是这两个参数：
+
+bg::
+    后台挂载。常见的情况是，CentOS开机过程中，可能网络有问题无法连接NFS服务端。此时，如果没指定bg，开机过程会卡很久
+tcp::
+    使用TCP协议挂载NFS。因为UDP协议允许丢包，可能会导致NFS数据丢失或不稳定。相反，TCP协议会校验接收的包数据是否完整有效
+====
+
+==== Server6&7客户端
+
+显示NFS服务端的共享列表
+
+[source,console]
+.Server6&7输出
+----
+# showmount -e 11.11.11.90
+Export list for 11.11.11.90:
+/data 12.12.12.0/24,11.11.11.0/24
+----
+
+挂载NFS共享目录/data到本地/nfs
+
+[source,bash]
+.Server6&7执行
+----
+mkdir /nfs
+chown -R nginx:nginx /nfs
+echo "11.11.11.90:/data  /nfs   nfs4      noatime,nolock,intr,bg,tcp     0 0" >>/etc/fstab
+mount -a
+----
+
+检查是否挂载成功
+
+[source,console]
+.Server6&7输出
+----
+# df -h
+Filesystem         Size  Used Avail Use% Mounted on
+/dev/sda1           48G  2.0G   44G   5% /
+tmpfs              246M     0  246M   0% /dev/shm
+/dev/sdb1          493G   70M  467G   1% /data
+/dev/sda2          444G   70M  422G   1% /data2
+11.11.11.90:/data  1.4T   70M  1.3T   1% /nfs
+----
+
+看到/nfs已经挂载成功。

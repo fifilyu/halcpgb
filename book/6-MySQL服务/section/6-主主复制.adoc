@@ -1,0 +1,324 @@
+=== 主-主复制
+
+==== 配置Server4-Server5主从复制
+
+===== Server4，第一MySQL主服务器
+
+主-主模式，两个MySQL服务器中，其中一个宕机。当恢复正常时，主-主之间会相互进行同步，可能出现死锁和IO问题。所以，其中一个
+MySQL服务器默认不启动slave服务。本书设置如下：
+
+* 第二MySQL从服务器(Server1)默认不启动slave服务。脚本(/opt/check_mysql_slave.sh)每两分钟检测一次slave服务，如未启动slave
+服务则启动之
+* 第一MySQL从服务器(Server2)默认启动slave服务
+
+[source,bash]
+.Server1执行
+----
+cat <<EOF >/opt/check_mysql_slave.sh
+mysql_cmd="/usr/bin/mysql -uroot -prootpassword -e"
+$mysql_cmd "show slave status\G;"|grep "Slave_IO_Running: Yes" >/dev/null || $mysql_cmd "start slave;"
+EOF
+
+echo "*/2 * * * * /bin/sh /opt/check_mysql_slave.sh 2>&1 >/dev/null" >> /var/spool/cron/root
+----
+
+在Server4上，登录MySQL Shell：
+
+`mysql -uroot -prootpassword`
+
+在MySQL Shell中执行
+
+[source,bash]
+.Server1执行
+----
+SHOW MASTER STATUS;
+
+grant all privileges on *.* to root@"10.10.10.70"  identified by 'rootpassword';
+
+grant all privileges on *.* to root@"10.10.10.80"  identified by 'rootpassword';
+
+grant all privileges on *.* to root@"10.10.10.100"  identified by 'rootpassword';
+
+grant all privileges on *.* to root@"10.10.10.201"  identified by 'rootpassword';
+
+grant all privileges on *.* to root@"10.10.10.202"  identified by 'rootpassword';
+
+grant replication slave on *.* to slaveuser@"13.13.13.101"  identified by 'slaveuserpassword';
+
+grant replication slave on *.* to slaveuser@"13.13.13.102"  identified by 'slaveuserpassword';
+
+flush privileges;
+----
+
+[TIP]
+13.13.13.0/24是Server4&5服务器之间使用千兆网线直连的网络。
+允许Keepalived和Nginx服务器(10.10.10.70&80&201&202)可以远程访问MySQL。
+
+[source,console]
+.Server1输出
+----
+# mysql -uroot -prootpassword
+......
+mysql> SHOW MASTER STATUS;
++------------------+----------+--------------+------------------+
+| File             | Position | Binlog_Do_DB | Binlog_Ignore_DB |
++------------------+----------+--------------+------------------+
+| mysql-bin.000001 |      106 |              |                  |
++------------------+----------+--------------+------------------+
+1 row in set (0.00 sec)
+
+mysql> grant all privileges on *.* to root@"10.10.10.70" identified by 'slaveuserpassword';
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> grant all privileges on *.* to root@"10.10.10.80" identified by 'slaveuserpassword';
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> grant all privileges on *.* to root@"10.10.10.100" identified by 'slaveuserpassword';
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> grant replication slave on *.* to root@"10.10.10.201" identified by 'slaveuserpassword';
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> grant replication slave on *.* to root@"10.10.10.202" identified by 'slaveuserpassword';
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> grant replication slave on *.* to slaveuser@"13.13.13.101" identified by 'slaveuserpassword';
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> grant replication slave on *.* to slaveuser@"13.13.13.102" identified by 'slaveuserpassword';
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> 
+----
+
+按Ctrl+C退出MySQL Shell。
+
+获取到列“File”的值mysql-bin.000001，列“Position”的值106。
+
+此时，Server4上的MySQL不要做任何。防止主服务器状态值变化。
+
+===== Server5，第一MySQL从服务器
+
+. 设置第一MySQL从服务器
+
+登录MySQL Shell：
+
+`mysql -uroot -prootpassword`
+
+在MySQL Shell中执行：
+
+[source,console]
+.Server2执行
+----
+change master to master_host='13.13.13.101',  
+master_user='slaveuser',  
+master_password='slaveuserpassword',  
+master_log_file='mysql-bin.000001',  
+master_log_pos=106;  
+
+start slave;
+
+show slave status\G;
+----
+
+[source,console]
+.Server2输出
+----
+# mysql -uroot -prootpassword
+......
+mysql> change master to master_host='13.13.13.101',
+    -> master_user='slaveuser',
+    -> master_password='slaveuserpassword',
+    -> master_log_file='mysql-bin.000001',
+    -> master_log_pos=450;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> start slave;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> show slave status\G;
+*************************** 1. row ***************************
+               Slave_IO_State: Waiting for master to send event
+                  Master_Host: 13.13.13.101
+                  Master_User: slaveuser
+                  Master_Port: 3306
+                Connect_Retry: 60
+              Master_Log_File: mysql-bin.000001
+          Read_Master_Log_Pos: 450
+               Relay_Log_File: mysql-relay-bin.000002
+                Relay_Log_Pos: 595
+        Relay_Master_Log_File: mysql-bin.000001
+             Slave_IO_Running: Yes
+            Slave_SQL_Running: Yes
+......
+                Last_IO_Errno: 0
+                Last_IO_Error: 
+               Last_SQL_Errno: 0
+               Last_SQL_Error: 
+1 row in set (0.00 sec)
+
+ERROR: 
+No query specified
+
+mysql> 
+----
+
+如果Slave_IO_Running和Slave_SQL_Running状态为Yes，Last_SQL_Errno为0，则表示主从配置成功。
+
+==== 配置Server5-Server4主从复制
+
+===== Server5，第二MySQL主服务器
+
+查看Master状态
+[source,console]
+.Server5执行
+----
+mysql -uroot -prootpassword -e "SHOW MASTER STATUS;"
+----
+
+[source,console]
+.Server5输出
+----
+# mysql -uroot -prootpassword -e "SHOW MASTER STATUS;"
++------------------+----------+--------------+------------------+
+| File             | Position | Binlog_Do_DB | Binlog_Ignore_DB |
++------------------+----------+--------------+------------------+
+| mysql-bin.000001 |      450 |              |                  |
++------------------+----------+--------------+------------------+
+1 row in set (0.00 sec)
+----
+
+按Ctrl+C退出MySQL Shell。
+
+获取到列“File”的值mysql-bin.000001，列“Position”的值450。
+
+===== Server4，第二MySQL从服务器
+
+. 设置第二MySQL从服务器
+
+登录Server4的MySQL Shell执行
+
+[source,console]
+.Server4执行
+----
+change master to master_host='13.13.13.102',  
+master_user='slaveuser',  
+master_password='slaveuserpassword',  
+master_log_file='mysql-bin.000001',  
+master_log_pos=450;
+
+start slave;
+
+show slave status\G;
+----
+
+[source,console]
+.Server4输出
+----
+# mysql -uroot -prootpassword
+......
+mysql> change master to master_host='13.13.13.102',
+    -> master_user='slaveuser',
+    -> master_password='slaveuserpassword',
+    -> master_log_file='mysql-bin.000001',
+    -> master_log_pos=450;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> start slave;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> show slave status\G;
+*************************** 1. row ***************************
+               Slave_IO_State: Waiting for master to send event
+                  Master_Host: 13.13.13.102
+                  Master_User: slaveuser
+                  Master_Port: 3306
+                Connect_Retry: 60
+              Master_Log_File: mysql-bin.000001
+          Read_Master_Log_Pos: 450
+               Relay_Log_File: mysql-relay-bin.000002
+                Relay_Log_Pos: 251
+        Relay_Master_Log_File: mysql-bin.000001
+             Slave_IO_Running: Yes
+            Slave_SQL_Running: Yes
+.....
+                Last_IO_Errno: 0
+                Last_IO_Error: 
+               Last_SQL_Errno: 0
+               Last_SQL_Error: 
+1 row in set (0.00 sec)
+
+ERROR: 
+No query specified
+----
+
+如果Slave_IO_Running和Slave_SQL_Running状态为Yes，Last_SQL_Errno为0，则表示主从配置成功。
+
+==== 测试
+
+===== 测试Server4-Server5主从
+
+在第一主库上创建数据库 `testdb` ，在第一从库查看是否同步创建。
+
+[source,console]
+.Server4 MySQL Shell
+----
+# mysql -uroot -prootpassword
+......
+mysql> create database testdb;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> 
+----
+
+[source,console]
+.Server5 MySQL Shell
+----
+# mysql -uroot -prootpassword
+......
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| test               |
+| testdb             |
++--------------------+
+4 rows in set (0.00 sec)
+
+mysql> 
+----
+
+===== 测试Server5-Server4主从
+
+在第二主库上删除数据库 `testdb` ，在第二从库查看是否同步删除。
+
+[source,console]
+.Server5执行和输出
+----
+# mysql -uroot -prootpassword
+......
+mysql> drop database testdb;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> 
+----
+
+[source,console]
+.Serve4执行和输出
+----
+# mysql -uroot -prootpassword
+......
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| test               |
++--------------------+
+3 rows in set (0.00 sec)
+
+mysql> 
+----

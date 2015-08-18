@@ -1,0 +1,48 @@
+=== 安装CentOS6
+
+==== 获取
+访问 http://wiki.centos.org/Download 选择 “CentOS-6”->“x86_64”，选择最快的镜像下载“CentOS-6.7-x86_64-minimal.iso”。
+
+[TIP]
+推荐安装迷你版本，这是最小化安装。占用最少的硬盘空间，安装最少的软件包。
+
+
+==== 安装
+
+限于篇幅，本书不涉及具体的安装过程。
+
+详细的安装文档，请访问：
+https://access.redhat.com/documentation/zh-CN/Red_Hat_Enterprise_Linux/6/html/Installation_Guide/index.html[Red Hat Enterprise Linux 6 Installation Guide]
+
+==== 安装软件包
+
+缓存软件包列表：`yum makecache`
+
+安装：`yum install -y curl rsync vim wget mysql`
+
+
+==== 设置系统
+
+禁用SELINUX，必须重启才能生效
+
+`echo SELINUX=disabled>/etc/selinux/config`
+
+`echo SELINUXTYPE=targeted>>/etc/selinux/config`
+
+清除iptables的默认规则
+
+`iptables -F`
+
+`service  iptables save`
+
+ssh登录时，登录ip被会服务端反向解析为域名，导致ssh登录缓慢
+
+sed -i "s/#UseDNS yes/UseDNS no/" /etc/ssh/sshd_config
+
+ssh登录时，GSSAPIAuthentication 认证会导致登录缓慢
+
+sed -i "s/GSSAPIAuthentication yes/GSSAPIAuthentication no/" /etc/ssh/sshd_config
+
+[TIP]
+对新手来说SELINUX和默认的iptables规则带来太多麻烦。搭建集群时，我们暂时禁用和关闭它们。
+整个集群成功后，可以考虑启用它们。
