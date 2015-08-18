@@ -5,7 +5,7 @@
 
 ==== NFS存储备份源
 
-* 复制 http://fifilyu.github.io/halcpgb/file/Server3.rsyncd.conf[file/Server3.rsyncd.conf] 到Server3的 `/etc` 目录
+* 上传 http://fifilyu.github.io/halcpgb/file/Server3.etc.rsyncd.conf[Server3.etc.rsyncd.conf] 到Server3的 `/etc` 目录
 
 [source,bash]
 .Server3执行
@@ -19,7 +19,7 @@ echo "/usr/bin/rsync --daemon" >>/etc/rc.local
 [TIP]
 假设所有的动态网页文件全部存放在`/data`目录。
 
-* 复制 http://fifilyu.github.io/halcpgb/file/Server7.rsyncd.conf[file/Server7.rsyncd.conf] 到Server7的 `/etc` 目录。
+* 上传 http://fifilyu.github.io/halcpgb/file/Server7.etc.rsyncd.conf[Server7.etc.rsyncd.conf] 到Server7的 `/etc` 目录。
 
 [source,bash]
 .Server7执行
@@ -30,9 +30,9 @@ echo "/usr/bin/rsync --daemon" >>/etc/rc.local
 
 ==== MySQL冷备份源
 
-* 复制 http://fifilyu.github.io/halcpgb/file/Server5.rsyncd.conf[file/Server5.rsyncd.conf] 到Server5的 `/etc` 目录
-* 复制 http://fifilyu.github.io/halcpgb/file/Server5.bak_db_dump.sh[file/Server5.bak_db_dump.sh] 到Server5的 `/opt` 目录
-* 复制 http://fifilyu.github.io/halcpgb/file/Server5.bak_db_binlog.sh[file/Server5.bak_db_binlog.sh] 到Server5的 `/opt` 目录
+* 上传 http://fifilyu.github.io/halcpgb/file/Server5.etc.rsyncd.conf[Server5.etc.rsyncd.conf] 到Server5的 `/etc` 目录
+* 上传 http://fifilyu.github.io/halcpgb/file/Server5.opt.bak_db_dump.sh[Server5.opt.bak_db_dump.sh] 到Server5的 `/opt` 目录
+* 上传 http://fifilyu.github.io/halcpgb/file/Server5.opt.bak_db_binlog.sh[Server5.opt.bak_db_binlog.sh] 到Server5的 `/opt` 目录
 
 [source,bash]
 .Server5执行
@@ -50,7 +50,7 @@ echo "1 2 * * 0 /bin/sh /opt/bak_db_dump.sh" >>/var/spool/cron/root
 
 ==== 备份客户端
 
-* 复制 http://fifilyu.github.io/halcpgb/file/Server2.rsync_all_bak.sh[file/Server2.rsync_all_bak.sh] 到Server2的 `/opt` 目录
+* 上传 http://fifilyu.github.io/halcpgb/file/Server2.opt.rsync_all_bak.sh[Server2.opt.rsync_all_bak.sh] 到Server2的 `/opt` 目录
 
 [source,bash]
 .Server2执行

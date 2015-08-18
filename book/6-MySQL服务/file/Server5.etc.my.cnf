@@ -1,0 +1,28 @@
+[mysqld]
+datadir=/data/mysql
+socket=/var/lib/mysql/mysql.sock
+user=mysql
+# Disabling symbolic-links is recommended to prevent assorted security risks
+symbolic-links=0
+
+#跳过主机名解析，加快MySQL远程访问速度
+skip-name-resolve
+max_allowed_packet = 100M
+server-id=2
+log_bin=/data2/mysql_binlogs/mysql-bin.log
+
+relay_log=/data2/mysql_binlogs/mysql-relay-bin
+# 让从服务器记录日志，有助于在必要时把从切换成主。
+log_slave_updates = 1
+
+sync_binlog=1
+innodb_flush_log_at_trx_commit=1
+innodb_support_xa=1
+
+#解决自动增长的列冲突
+auto_increment_increment=2
+auto_increment_offset=1
+
+[mysqld_safe]
+log-error=/var/log/mysqld.log
+pid-file=/var/run/mysqld/mysqld.pid
