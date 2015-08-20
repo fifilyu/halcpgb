@@ -17,6 +17,6 @@ High-Availability Loadbalancing Clusters Practice Guide for Beginners
 == 本书的读者
 
 本书可以作为搭建 Web 服务集群的一本入门指南或教程。它主要是为新手而设计,不过对于有经验
-的程序员来说,它同样有用。
+的运维(System Administrator，简称SA)来说,它同样有用。
 
 本书假设读者具有初步的 Linux 使用经验。了解 Linux 的基本工作原理，熟悉常用 Shell 命令。
