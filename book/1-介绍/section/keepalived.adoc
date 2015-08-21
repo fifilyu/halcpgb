@@ -1,16 +1,16 @@
 === Keepalived
 集群中的作用：*[red]#负载均衡和高可用#*
 
-http://www.keepalived.org[Keepalived] 是一个用 C 编写的路由软件。项目的主要目标是基于 Linux 系统提供简单稳定的负载均衡和高可用性基础设施。负载均衡框架依赖于鼎鼎大名的 Linux 虚拟服务器 (IPVS) 内核模块提供 Layer4 负载均衡。Keepalived 实现了一套校验器，能够根据健康状态自动管理维护负载均衡服务协议。另一方面，高可用性依靠 VRRP 协议实现。
+http://www.keepalived.org[Keepalived] 是一个用C编写的路由软件。项目的主要目标是基于Linux系统提供简单稳定的负载均衡和高可用性基础设施。负载均衡框架依赖于鼎鼎大名的Linux虚拟服务器 (IPVS)内核模块提供Layer4负载均衡。Keepalived实现了一套校验器，能够根据健康状态自动管理维护负载均衡服务协议。另一方面，高可用性依靠VRRP协议实现。
 
 工作原理分别如下：
 
 image::image/keepalived.jpg[Keepalived 工作原理]
 
-Keepalived 根据配置文件设置负载均衡主服务器和从服务器，分别在主和从上增加 real server 到本机的 LVS 中。
+Keepalived根据配置文件设置负载均衡主服务器和从服务器，分别在主和从上增加Real Server到本机的LVS中。
 
 主和从服务器：
-每台主从服务器通过 VRRP 协议相互检测对方是否工作正常，如不正常，会做主和从之间的角色切换。
+每台主从服务器通过VRRP协议相互检测对方是否工作正常，如不正常，会做主和从之间的角色切换。
 
-real server：
-一般通过端口或HTTP URL返回值检测 real server 是否工作正常，如不正常，则从 LVS 规则中剔除。
+Real Server：
+一般通过端口或HTTP URL返回值检测Real Server是否工作正常，如不正常，则从LVS规则中剔除。

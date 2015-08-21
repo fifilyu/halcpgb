@@ -3,15 +3,15 @@
 
 image::image/lvs_logo.jpg[Linux Virtual Server]
 
-http://www.linuxvirtualserver.org[Linux Virtual Server (LVS)] 是一个建立在多个 real server 集群之上的高度可扩展且高可用服务器，使负载均衡运行于 Linux 系统之上。
+http://www.linuxvirtualserver.org[Linux Virtual Server (LVS)] 是一个建立在多个Real Server集群之上的高度可扩展且高可用服务器，使负载均衡运行于Linux系统之上。
 服务器集群的结构是完全向最终用户透明的，对用户来说就像是一个独立的高性能虚拟服务器。
 
 工作原理分别如下：
 
 image::image/lvs.png[LVS 工作原理]
 
-由于 LVS 的成功，从 Linux 2.4 内核开始，LVS 已经被合并到了内核代码中。
+由于LVS的成功，从Linux 2.4内核开始，LVS已经被合并到了内核代码中。
 
-本项目在1998年5月由章文嵩博士创建。此后一直作为 Linux 内核开发者。 目前，章文嵩博士任阿里集团副总裁、高级研究员。
+本项目在1998年5月由章文嵩博士创建。此后一直作为Linux内核开发者。 目前，章文嵩博士任阿里集团副总裁、高级研究员。
 
 更加详细的介绍，请访问 http://www.linuxvirtualserver.org/zh

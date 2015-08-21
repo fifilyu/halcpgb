@@ -37,11 +37,11 @@ https://access.redhat.com/documentation/zh-CN/Red_Hat_Enterprise_Linux/6/html/In
 
 ssh登录时，登录ip被会服务端反向解析为域名，导致ssh登录缓慢
 
-sed -i "s/#UseDNS yes/UseDNS no/" /etc/ssh/sshd_config
+`sed -i "s/#UseDNS yes/UseDNS no/" /etc/ssh/sshd_config`
 
-ssh登录时，GSSAPIAuthentication 认证会导致登录缓慢
+ssh登录时，GSSAPIAuthentication认证会导致登录缓慢
 
-sed -i "s/GSSAPIAuthentication yes/GSSAPIAuthentication no/" /etc/ssh/sshd_config
+`sed -i "s/GSSAPIAuthentication yes/GSSAPIAuthentication no/" /etc/ssh/sshd_config`
 
 [TIP]
 对新手来说SELINUX和默认的iptables规则带来太多麻烦。搭建集群时，我们暂时禁用和关闭它们。

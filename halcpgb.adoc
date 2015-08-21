@@ -10,9 +10,9 @@ include::book/前言.adoc[]
 
 include::book/1-介绍/1-介绍.adoc[]
 
-include::book/2-服务器与规划/2-服务器与规划.adoc[]
+include::book/2-网络拓扑/2-网络拓扑.adoc[]
 
-include::book/3-网络拓扑/3-网络拓扑.adoc[]
+include::book/3-服务器与规划/3-服务器与规划.adoc[]
 
 include::book/4-安装设置CentOS6/4-安装设置CentOS6.adoc[]
 

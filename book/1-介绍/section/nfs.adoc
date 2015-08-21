@@ -1,6 +1,6 @@
 === Network File System
 集群中的作用：*[red]#文件存储#*
 
-https://tools.ietf.org/html/rfc1813[Network File System (NFS)] 是一种分布式文件系统协议，最初由 Sun Microsystems 公司开发，并于1984年发布。其功能旨在允许客户端主机可以像访问本地存储一样通过网络访问服务器端文件。
+https://tools.ietf.org/html/rfc1813[Network File System (NFS)] 是一种分布式文件系统协议，最初由Sun Microsystems 公司开发，并于1984年发布。其功能旨在允许客户端主机可以像访问本地存储一样通过网络访问服务器端文件。
 
-NFS 在 RFC 中是一个开放、标准的协议，任何人或组织都可以依据标准实现它。
+NFS在RFC中是一个开放、标准的协议，任何人或组织都可以依据标准实现它。

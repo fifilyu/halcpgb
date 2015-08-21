@@ -1,4 +1,4 @@
 === iptables
 集群中的作用：*[red]#防火墙#*
 
-http://www.netfilter.org/projects/iptables[iptables] 是一个用户空间命令行程序，用以配置 Linux 2.4 及其以上内核包过滤规则集，类似于 Windows 系统的防火墙。
+http://www.netfilter.org/projects/iptables[iptables] 是一个用户空间命令行程序，用以配置Linux 2.4及其以上版本内核包过滤规则集，类似于Windows系统的防火墙。
