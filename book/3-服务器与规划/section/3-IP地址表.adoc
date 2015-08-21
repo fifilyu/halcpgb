@@ -27,5 +27,5 @@
                                     <s|[blue]#eth1# <s|[blue]#11.11.11.201# s|[blue]#Private IP#
 .3+^.^|Nginx2 .3+^.^|Server7 <s|[red]#eth0# <s|[red]#192.168.1.202# s|[red]#Public IP#
                                 <s|[black]#eth0:lan# <s|[black]#10.10.10.202# s|[black]#Private IP#
-                                <s|[blue]#eth1# <s|[blue]#11.11.11.202# s|[blue]#Private IP#
+                                <s|[blue]#eth1# <s|[blue]#14.14.14.202# s|[blue]#Private IP#
 |==========================
