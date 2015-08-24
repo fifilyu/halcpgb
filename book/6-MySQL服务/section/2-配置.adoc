@@ -1,6 +1,6 @@
 === 配置
 
-初试配置MySQL数据库。
+初始化MySQL数据库。
 
 [source,bash]
 .Server4&5执行
