@@ -7,19 +7,19 @@
 主-主模式，两个MySQL服务器中，其中一个宕机。当恢复正常时，主-主之间会相互进行同步，可能出现死锁和IO问题。所以，其中一个
 MySQL服务器默认不启动slave服务。本书设置如下：
 
-* 第二MySQL从服务器(Server1)默认不启动slave服务。脚本(/opt/check_mysql_slave.sh)每两分钟检测一次slave服务，如未启动slave
+* 第二MySQL从服务器(Server4)默认不启动slave服务。脚本(/opt/check_mysql_slave.sh)每两分钟检测一次slave服务，如未启动slave
 服务则启动之
-* 第一MySQL从服务器(Server2)默认启动slave服务
+* 第一MySQL从服务器(Server5)默认启动slave服务
 
 [source,bash]
-.Server1执行
+.Server4执行
 ----
 cat <<EOF >/opt/check_mysql_slave.sh
 mysql_cmd="/usr/bin/mysql -uroot -prootpassword -e"
-$mysql_cmd "show slave status\G;"|grep "Slave_IO_Running: Yes" >/dev/null || $mysql_cmd "start slave;"
+\$mysql_cmd "show slave status\G;"|grep "Slave_IO_Running: Yes" >/dev/null || \$mysql_cmd "start slave;"
 EOF
 
-echo "*/2 * * * * /bin/sh /opt/check_mysql_slave.sh 2>&1 >/dev/null" >> /var/spool/cron/root
+echo "*/2 * * * * /bin/sh /opt/check_mysql_slave.sh >/dev/null 2>&1" >> /var/spool/cron/root
 ----
 
 在Server4上，登录MySQL Shell：
@@ -29,7 +29,7 @@ echo "*/2 * * * * /bin/sh /opt/check_mysql_slave.sh 2>&1 >/dev/null" >> /var/spo
 在MySQL Shell中执行
 
 [source,bash]
-.Server1执行
+.Server5执行
 ----
 SHOW MASTER STATUS;
 
@@ -55,7 +55,7 @@ flush privileges;
 允许Keepalived和Nginx服务器(10.10.10.70&80&201&202)可以远程访问MySQL。
 
 [source,console]
-.Server1输出
+.Server4输出
 ----
 # mysql -uroot -prootpassword
 ......
@@ -122,7 +122,7 @@ show slave status\G;
 ----
 
 [source,console]
-.Server2输出
+.Server5输出
 ----
 # mysql -uroot -prootpassword
 ......
@@ -295,7 +295,7 @@ mysql>
 在第二主库上删除数据库 `testdb` ，在第二从库查看是否同步删除。
 
 [source,console]
-.Server5执行和输出
+.Server5 MySQL Shell
 ----
 # mysql -uroot -prootpassword
 ......
@@ -306,7 +306,7 @@ mysql>
 ----
 
 [source,console]
-.Serve4执行和输出
+.Server4 MySQL Shell
 ----
 # mysql -uroot -prootpassword
 ......

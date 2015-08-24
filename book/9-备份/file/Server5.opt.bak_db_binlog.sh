@@ -4,7 +4,7 @@
 src_dir=/data2/mysql_binlogs/
 dest_dir=/data2/mysql_bak/binlog
 
-mkdir -p /data2/mysql_bak/binlog/{change,source} 2>&1 >/dev/null
+mkdir -p /data2/mysql_bak/binlog/{change,source} >/dev/null 2>&1
 
 # 上次完整备份A，时间20150102
 # 本次完整备份B，时间20150103

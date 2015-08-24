@@ -11,7 +11,7 @@ chmod +x /opt/stop_keepalived.sh /opt/check_keepalived.sh
 #增加计划任务，每分钟执行一次脚本。当Keepalived服务停止时，该脚本会启动服务
 #此任务与Keepalived配置文件中使用/opt/stop_keepalived.sh脚本结合起来，组成了一个启动和停止服务的环路。
 #配合实现MySQL的高可用框架。
-echo "*/1 * * * * /bin/sh /opt/check_keepalived.sh >/dev/null" >> /var/spool/cron/root
+echo "*/1 * * * * /bin/sh /opt/check_keepalived.sh >/dev/null 2>&1" >> /var/spool/cron/root
 
 chkconfig keepalived on
 service keepalived start

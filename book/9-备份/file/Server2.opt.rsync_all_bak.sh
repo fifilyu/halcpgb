@@ -13,10 +13,10 @@ time=`date +%F%t%T`
 
 prefix="rsync -abvcz --progress --delete --backup-dir="
 
-mkdir -p ${log_dir} 2>&1 >/dev/null
-mkdir -p /data2/backup/db/binlog/{change,source} /data2/backup/db/dump/{change,source} 2>&1 >/dev/null
-mkdir -p /data2/backup/nfs/{change,source} 2>&1 >/dev/null
-mkdir -p /data2/backup/web/{change,source} 2>&1 >/dev/null
+mkdir -p ${log_dir} >/dev/null 2>&1
+mkdir -p /data2/backup/db/binlog/{change,source} /data2/backup/db/dump/{change,source} >/dev/null 2>&1
+mkdir -p /data2/backup/nfs/{change,source} >/dev/null 2>&1
+mkdir -p /data2/backup/web/{change,source} >/dev/null 2>&1
 
 echo >> ${run_log}
 echo "Start: ${time}" >>${run_log}
