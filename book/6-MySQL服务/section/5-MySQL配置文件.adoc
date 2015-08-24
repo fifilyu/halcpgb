@@ -5,14 +5,20 @@
 ----
 rm -f /etc/my.cnf
 wget -c http://fifilyu.github.io/halcpgb/file/Server4.etc.my.cnf -O /etc/my.cnf
+
+mkdir /data2/mysql_binlogs
+chown -R mysql /data2/mysql_binlogs
 service mysqld restart
 ----
 
 [source,bash]
 .Server5执行
 ----
-mv /etc/my.cnf /etc/my.cnf.init.bak
+rm -f /etc/my.cnf
 wget -c http://fifilyu.github.io/halcpgb/file/Server5.etc.my.cnf -O /etc/my.cnf
+
+mkdir /data2/mysql_binlogs
+chown -R mysql /data2/mysql_binlogs
 service mysqld restart
 ----
 

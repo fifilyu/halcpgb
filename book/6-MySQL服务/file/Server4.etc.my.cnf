@@ -5,15 +5,15 @@ user=mysql
 # Disabling symbolic-links is recommended to prevent assorted security risks
 symbolic-links=0
 
-#跳过主机名解析，加快MySQL远程访问速度
+# 跳过主机名解析，加快MySQL远程访问速度
 skip-name-resolve
 max_allowed_packet = 100M
 server-id=1
 log_bin=/data2/mysql_binlogs/mysql-bin.log
 
 relay_log=/data2/mysql_binlogs/mysql-relay-bin
-#主-主模式，两个MySQL服务器中，其中一个宕机。当恢复正常时，主-主之间会相互进行同步，可能出现死锁和IO问题。所以，其中一个
-MySQL服务器默认不启动slave服务。
+# 主-主模式，两个MySQL服务器中，其中一个宕机。当恢复正常时，主-主之间会相互进行同步，可能出现死锁和IO问题。所以，其中一个
+# MySQL服务器默认不启动slave服务。
 skip_slave_start
 # 让从服务器记录日志，有助于在必要时把从切换成主。
 log_slave_updates = 1
@@ -22,7 +22,7 @@ sync_binlog=1
 innodb_flush_log_at_trx_commit=1
 innodb_support_xa=1
 
-#解决自动增长的列冲突
+# 解决自动增长的列冲突
 auto_increment_increment=2
 auto_increment_offset=1
 
