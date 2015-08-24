@@ -5,7 +5,7 @@
 [source,bash]
 .Server4&5执行
 ----
-ls /etc/my.cnf.init.bak 2>&1 >/dev/null || cp /etc/my.cnf /etc/my.cnf.init.bak
+ls /etc/my.cnf.init.bak >/dev/null 2>&1 || cp /etc/my.cnf /etc/my.cnf.init.bak
 
 sed -i 's#datadir=/var/lib/mysql#datadir=/data/mysql#g' /etc/my.cnf
 
