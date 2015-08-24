@@ -1,5 +1,7 @@
 === 配置
 
+在Server6&7上执行以下操作：
+
 开机启动Nginx服务::
 `chkconfig nginx on`
 
