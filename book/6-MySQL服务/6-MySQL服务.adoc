@@ -1,6 +1,6 @@
 == MySQL服务
 
-在Server4/5上，分别安装MySQL并测试。
+在Server4&5上，分别安装MySQL并测试。
 
 include::section/1-安装.adoc[]
 

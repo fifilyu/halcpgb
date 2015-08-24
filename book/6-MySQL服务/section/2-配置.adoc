@@ -1,34 +1,22 @@
 === 配置
 
-[TIP]
-除非明确说明，否则只需要修改Server4上的/etc/my.cnf。
-等待一切准备好之后，直接将Server4的my.cnf复制到Server5。
+初试配置MySQL数据库。
 
-编辑/etc/my.cnf，修改datadir值为/data/mysql。
-
+[source,bash]
+.Server4&5执行
 ----
-......
-[mysqld]
-datadir=/var/lib/mysql
-......
+echo y|cp /etc/my.cnf /etc/my.cnf.init.bak
+
+sed -i 's#datadir=/var/lib/mysql#datadir=/data/mysql#g' /etc/my.cnf
+
+mkdir /data/mysql
+
+mysql_install_db
+
+service mysqld start
+
+mysqladmin -uroot password "rootpassword"
 ----
-
-修改为
-
-----
-......
-[mysqld]
-datadir=/data/mysql
-......
-----
-
-
-Server4&5上初始化MySQL数据并设置密码
-
-. `mkdir /data/mysql`
-. `mysql_install_db`
-. `service mysqld start`
-. `mysqladmin -uroot password "rootpassword"`
 
 [TIP]
 本书不涉及具体的参数优化，仅会设置MySQL集群需要的参数。保证3306端口能够连接即可。

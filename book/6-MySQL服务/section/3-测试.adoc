@@ -6,6 +6,8 @@
 
 在终端中执行 `ss -t4nlp|grep ':3306'`
 
+[source,console]
+.Server4&5输出
 ----
 # ss -t4nlp|grep ':3306'
 LISTEN     0      50                        *:3306                     *:*      users:(("mysqld",22131,10))
@@ -20,6 +22,8 @@ netstat命令已经过时，建议使用ss命令代替。
 
 在终端中执行 `mysql -uroot -prootpassword`
 
+[source,console]
+.Server4&5输出
 ----
 # mysql -uroot -prootpassword
 Welcome to the MySQL monitor.  Commands end with ; or \g.

@@ -1,8 +1,20 @@
 === MySQL配置文件
 
-. 上传 http://fifilyu.github.io/halcpgb/file/Server4.etc.my.cnf[Server4.etc.my.cnf] 到Server4，覆盖文件 `/etc/my.cnf`
-. 上传 http://fifilyu.github.io/halcpgb/file/Server5.etc.my.cnf[Server5.etc.my.cnf] 到Server5的，覆盖文件 `/etc/my.cnf`
-. 重启Server4&5的MySQL服务，使配置生效 `service mysqld restart`
+[source,bash]
+.Server4执行
+----
+rm -f /etc/my.cnf
+wget -c http://fifilyu.github.io/halcpgb/file/Server4.etc.my.cnf -O /etc/my.cnf
+service mysqld restart
+----
+
+[source,bash]
+.Server5执行
+----
+mv /etc/my.cnf /etc/my.cnf.init.bak
+wget -c http://fifilyu.github.io/halcpgb/file/Server5.etc.my.cnf -O /etc/my.cnf
+service mysqld restart
+----
 
 [TIP]
 ====
