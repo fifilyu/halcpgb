@@ -4,11 +4,9 @@
 
 ===== Server4，第一MySQL主服务器
 
-主-主模式，两个MySQL服务器中，其中一个宕机。当恢复正常时，主-主之间会相互进行同步，可能出现死锁和IO问题。所以，其中一个
-MySQL服务器默认不启动slave服务。本书设置如下：
+主-主模式，两个MySQL服务器中，其中一个宕机。当恢复正常时，主-主之间会相互进行同步，可能出现死锁和IO问题。所以，其中一个MySQL服务器默认不启动slave服务。本书设置如下：
 
-* 第二MySQL从服务器(Server4)默认不启动slave服务。脚本(/opt/check_mysql_slave.sh)每两分钟检测一次slave服务，如未启动slave
-服务则启动之
+* 第二MySQL从服务器(Server4)默认不启动slave服务。脚本(/opt/check_mysql_slave.sh)每两分钟检测一次slave服务，如未启动slave服务则启动之
 * 第一MySQL从服务器(Server5)默认启动slave服务
 
 [source,bash]
@@ -51,8 +49,7 @@ flush privileges;
 ----
 
 [TIP]
-13.13.13.0/24是Server4&5服务器之间使用千兆网线直连的网络。
-允许Keepalived和Nginx服务器(10.10.10.70&80&201&202)可以远程访问MySQL。
+13.13.13.0/24是Server4&5服务器之间使用千兆网线直连的网络。允许Keepalived和Nginx服务器(10.10.10.70&80&201&202)可以远程访问MySQL。
 
 [source,console]
 .Server4输出
