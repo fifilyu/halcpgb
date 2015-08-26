@@ -15,14 +15,18 @@ Web访问测试，和之前 <<lvs_test,LVS-测试访问>> 一样。
 
 ==== 测试数据库服务高可用
 
-在Server6&7上，执行
+在Server6&7上连接MySQL测试。
 
-`mysql -h 10.10.10.100 -uroot -prootpassword -e "SELECT @@hostname hostname;"`
+[source,console]
+.Server6&7执行
+----
+mysql -h 10.10.10.100 -uroot -prootpassword -e "SELECT @@hostname hostname;"
+----
 
 如果成功，则能看到 *Server5* 字样。
 
-.输出
 [source,console]
+.Server6&7输出
 ----
 # mysql -h 10.10.10.100 -uroot -prootpassword -e "SELECT @@hostname hostname;"
 +----------+
@@ -34,8 +38,8 @@ Web访问测试，和之前 <<lvs_test,LVS-测试访问>> 一样。
 
 此时，如果停止Server5上的Keepalived服务，执行同样的命令，会看到 *Server4* 字样。表示MySQL高可用配置成功。
 
-.输出
 [source,console]
+.Server6&7输出
 ----
 # mysql -h 10.10.10.100 -uroot -prootpassword -e "SELECT @@hostname hostname;"
 +----------+

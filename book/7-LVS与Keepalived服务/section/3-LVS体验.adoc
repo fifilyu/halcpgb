@@ -2,9 +2,10 @@
 
 本节仅仅体验如何使用LVS。此时不会修改任何系统配置文件，所有设置都是重启后即被还原。
 
-==== Director(Server1&2)
+==== Director
 
-[source, bash]
+[source,bash]
+.Server1&2执行
 ----
 ip addr add 192.168.1.200/24 broadcast 192.168.1.255 dev eth0
 
@@ -15,6 +16,8 @@ ipvsadm -a -t 192.168.1.200:80 -r 10.10.10.202 -g
 
 通过命令 `ipvsadm -ln` 查看增加的LVS设置
 
+[source,bash]
+.Server1&2输出
 ----
 # ipvsadm -ln
 IP Virtual Server version 1.2.1 (size=4096)
@@ -41,7 +44,8 @@ ipvsadm -a -t 192.168.1.200:80 -r 10.10.10.201 -g::
 
 ==== Real Server(Server6&7)
 
-[source, bash]
+[source,bash]
+.Server6&7执行
 ----
 ip addr add 192.168.1.200/32 dev lo
 ip route add 192.168.1.200/32 dev lo
@@ -120,7 +124,8 @@ Default value is 0. Note that some distributions enable it in startup scripts.
 
 ===== 创建测试页面
 
-[source, bash]
+[source,bash]
+.Server6&7执行
 ----
 html_page=/usr/share/nginx/html/index.html
 ip_addr=`ip a|grep '10.10.10'|awk '{print $2}'|awk -F'/' '{print $1}'`
@@ -140,13 +145,13 @@ echo "你看到内容来自 Real Server: $ip_addr" >>$html_page
 [TIP]
 为了测试的准确性，请直接使用 *[red]#Ctrl+F5强制刷新#* 网页，这样浏览器才不会显示缓存的内容。
 
-.输出
+.浏览器输出
 ----
 这个是一个测试页面。
 你看到内容来自 Real Server: 10.10.10.201
 ----
 
-.输出
+.浏览器输出
 ----
 这个是一个测试页面。
 你看到内容来自 Real Server: 10.10.10.202
@@ -154,6 +159,8 @@ echo "你看到内容来自 Real Server: $ip_addr" >>$html_page
 
 通过命令 `ipvsadm -ln` 查看访问分配情况
 
+[source,bash]
+.Server1&2输出
 ----
 # ipvsadm -ln
 IP Virtual Server version 1.2.1 (size=4096)
