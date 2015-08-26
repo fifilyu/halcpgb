@@ -52,7 +52,7 @@ EOF
 
 #当前系统生效
 ip addr add 10.10.10.100/32 dev lo
-ip route add 10.10.10.1000/32 dev lo
+ip route add 10.10.10.100/32 dev lo
 
 cat <<EOF >>/etc/sysctl.conf
 net.ipv4.conf.lo.arp_ignore = 1

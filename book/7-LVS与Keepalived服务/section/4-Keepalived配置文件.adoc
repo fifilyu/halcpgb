@@ -1,4 +1,27 @@
 === Keepalived配置文件
 
-* 上传 http://fifilyu.github.io/halcpgb/file/Server1.etc.keepalived.keepalived.conf[Server1.etc.keepalived.keepalived.conf] 到Server1，覆盖文件 `/etc/keepalived/keepalived.conf`
-* 上传 http://fifilyu.github.io/halcpgb/file/Server2.etc.keepalived.keepalived.conf[Server2.etc.keepalived.keepalived.conf] 到Server2，覆盖文件 `/etc/keepalived/keepalived.conf`
+[source,bash]
+.Server1执行
+----
+#备份默认配置文件
+ls /etc/keepalived/keepalived.conf.init.bak >/dev/null 2>&1 || cp /etc/keepalived/keepalived.conf /etc/keepalived/keepalived.conf.init.bak
+
+#删除默认配置文件
+rm -f /etc/keepalived/keepalived.conf
+
+#下载配置文件
+wget -c http://fifilyu.github.io/halcpgb/file/Server1.etc.keepalived.keepalived.conf -O /etc/keepalived/keepalived.conf
+----
+
+[source,bash]
+.Server2执行
+----
+#备份默认配置文件
+ls /etc/keepalived/keepalived.conf.init.bak >/dev/null 2>&1 || cp /etc/keepalived/keepalived.conf /etc/keepalived/keepalived.conf.init.bak
+
+#删除默认配置文件
+rm -f /etc/keepalived/keepalived.conf
+
+#下载配置文件
+wget -c http://fifilyu.github.io/halcpgb/file/Server2.etc.keepalived.keepalived.conf -O /etc/keepalived/keepalived.conf
+----
