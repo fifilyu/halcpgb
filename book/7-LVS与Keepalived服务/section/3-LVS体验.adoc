@@ -105,21 +105,6 @@ Define different modes for sending replies in response to received ARP requests 
 The max value from conf/{all,interface}/arp_ignore is used when ARP request is received on the {interface}
 ----
 
-.rp_filter - INTEGER
-----
-0 - No source validation.
-
-1 - Strict mode as defined in RFC3704 Strict Reverse Path Each incoming packet is tested against the FIB and if the interface is not the best reverse path the packet check will fail. By default failed packets are discarded.
-    
-2 - Loose mode as defined in RFC3704 Loose Reverse Path Each incoming packet's source address is also tested against the FIB and if the source address is not reachable via any interface the packet check will fail.
-
-Current recommended practice in RFC3704 is to enable strict mode to prevent IP spoofing from DDos attacks. If using asymmetric routing or other complicated routing, then loose mode is recommended.
-
-The max value from conf/{all,interface}/rp_filter is used when doing source validation on the {interface}.
-
-Default value is 0. Note that some distributions enable it in startup scripts.
-----
-
 ==== 测试
 
 ===== 创建测试页面
@@ -160,7 +145,7 @@ echo "你看到内容来自 Real Server: $ip_addr" >>$html_page
 通过命令 `ipvsadm -ln` 查看访问分配情况
 
 [source,bash]
-.Server1&2输出
+.Server1输出
 ----
 # ipvsadm -ln
 IP Virtual Server version 1.2.1 (size=4096)
@@ -179,6 +164,9 @@ InActConn::
 当LVS配置成功后，不断的访问 `ActiveConn` 和 `InActConn` 会持续变化。
 两个值都为0时，说明LVS配置出现错误。
 
+==== 清空临时配置
+
+重启Server1&6&7，清空所有临时配置。
 
 ==== 总结
 
