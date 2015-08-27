@@ -5,7 +5,7 @@
 ==== Director
 
 [source,bash]
-.Server1&2执行
+.Server1执行
 ----
 ip addr add 192.168.1.200/24 broadcast 192.168.1.255 dev eth0
 
@@ -17,7 +17,7 @@ ipvsadm -a -t 192.168.1.200:80 -r 10.10.10.202 -g
 通过命令 `ipvsadm -ln` 查看增加的LVS设置
 
 [source,bash]
-.Server1&2输出
+.Server1输出
 ----
 # ipvsadm -ln
 IP Virtual Server version 1.2.1 (size=4096)
