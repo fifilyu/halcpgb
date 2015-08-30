@@ -5,11 +5,12 @@
 
 ==== NFS存储备份源
 
-* 上传 http://fifilyu.github.io/halcpgb/file/Server3.etc.rsyncd.conf[Server3.etc.rsyncd.conf] 到Server3的 `/etc` 目录
-
 [source,bash]
 .Server3执行
 ----
+rm -f /etc/rsyncd.conf
+wget -c http://fifilyu.github.io/halcpgb/file/Server3.etc.rsyncd.conf -O /etc/rsyncd.conf
+
 rsync --daemon
 echo "/usr/bin/rsync --daemon" >>/etc/rc.local
 ----
@@ -19,24 +20,26 @@ echo "/usr/bin/rsync --daemon" >>/etc/rc.local
 [TIP]
 假设所有的动态网页文件全部存放在`/data`目录。
 
-* 上传 http://fifilyu.github.io/halcpgb/file/Server7.etc.rsyncd.conf[Server7.etc.rsyncd.conf] 到Server7的 `/etc` 目录。
-
 [source,bash]
 .Server7执行
 ----
+rm -f /etc/rsyncd.conf
+wget -c http://fifilyu.github.io/halcpgb/file/Server7.etc.rsyncd.conf -O /etc/rsyncd.conf
+
 rsync --daemon
 echo "/usr/bin/rsync --daemon" >>/etc/rc.local
 ----
 
 ==== MySQL冷备份源
 
-* 上传 http://fifilyu.github.io/halcpgb/file/Server5.etc.rsyncd.conf[Server5.etc.rsyncd.conf] 到Server5的 `/etc` 目录
-* 上传 http://fifilyu.github.io/halcpgb/file/Server5.opt.bak_db_dump.sh[Server5.opt.bak_db_dump.sh] 到Server5的 `/opt` 目录
-* 上传 http://fifilyu.github.io/halcpgb/file/Server5.opt.bak_db_binlog.sh[Server5.opt.bak_db_binlog.sh] 到Server5的 `/opt` 目录
-
 [source,bash]
 .Server5执行
 ----
+rm -f /etc/rsyncd.conf /opt/bak_db_dump.sh /opt/bak_db_binlog.sh
+wget -c http://fifilyu.github.io/halcpgb/file/Server5.etc.rsyncd.conf -O /etc/rsyncd.conf
+wget -c http://fifilyu.github.io/halcpgb/file/Server5.opt.bak_db_dump.sh -O /opt/bak_db_dump.sh
+wget -c http://fifilyu.github.io/halcpgb/file/Server5.opt.bak_db_binlog.sh -O /opt/bak_db_binlog.sh
+
 chmod 700 /opt/bak_db_dump.sh /opt/bak_db_binlog.sh
 
 rsync --daemon
@@ -50,11 +53,12 @@ echo "1 2 * * 0 /bin/sh /opt/bak_db_dump.sh" >>/var/spool/cron/root
 
 ==== 备份客户端
 
-* 上传 http://fifilyu.github.io/halcpgb/file/Server2.opt.rsync_all_bak.sh[Server2.opt.rsync_all_bak.sh] 到Server2的 `/opt` 目录
-
 [source,bash]
 .Server2执行
 ----
+rm -f /opt/rsync_all_bak.sh
+wget -c http://fifilyu.github.io/halcpgb/file/Server2.opt.rsync_all_bak.sh -O /opt/rsync_all_bak.sh
+
 chmod 700 /opt/rsync_all_bak.sh
 
 echo "1 5 * * * /bin/sh /opt/rsync_all_bak.sh" >>/var/spool/cron/root
