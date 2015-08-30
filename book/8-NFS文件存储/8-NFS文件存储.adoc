@@ -8,7 +8,7 @@
     由某种编程语言(Python、Ruby、C/C++、PHP、JSP、JAVA等)书写的文件。这种文件需要Web容器(Apache、Nginx、Tomcat等)转
 换为HTML，才能被浏览器显示为网页。比如，.py、.php、.jsp等等
 静态文件::
-    不需要Web容器(Apache、Nginx、Tomcat等)也能被浏览器显示的文件。比如，.js、css、图片(.jpg/.png/.gif)等等
+    不需要Web容器(Apache、Nginx、Tomcat等)也能被浏览器显示的文件。比如，.js、.css、图片(.jpg/.png/.gif)等等
 
 include::section/1-安装.adoc[]
 
