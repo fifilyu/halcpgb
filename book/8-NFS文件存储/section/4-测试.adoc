@@ -12,10 +12,17 @@
 ----
 
 [source,console]
-.Server6&7输出
+.Server6输出
 ----
 # df -h|grep '/nfs'
 11.11.11.90:/data  1.4T   70M  1.3T   1% /nfs
+----
+
+[source,console]
+.Server7输出
+----
+# df -h|grep '/nfs'
+14.14.14.90:/data  1.4T   70M  1.3T   1% /nfs
 ----
 
 看到/nfs，则表示已经挂载成功。
