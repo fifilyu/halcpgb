@@ -18,7 +18,7 @@ echo "/usr/bin/rsync --daemon" >>/etc/rc.local
 ==== Nginx文件备份源
 
 [TIP]
-假设所有的动态网页文件全部存放在`/data`目录。
+假设所有的动态网页文件全部存放在 `/data` 目录。
 
 [source,bash]
 .Server7执行
