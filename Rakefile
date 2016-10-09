@@ -18,7 +18,11 @@ namespace :book do
   desc 'build basic book formats'
   task :build => :prebuild do
     puts "Converting to HTML..."
-    `bundle exec asciidoctor -n -a stylesheet=./stylesheets/asciidoctor.css -a index,toc=left,syntaxhighlighting halcpgb.adoc`
+    `bundle exec asciidoctor halcpgb.adoc`
     puts " -- HTML output at halcpgb.html"
+
+    puts "Converting to PDF..."
+    `bundle exec asciidoctor-pdf -r asciidoctor-pdf-cjk-kai_gen_gothic -a pdf-style=KaiGenGothicCN halcpgb.adoc`
+    puts " -- PDF output at halcpgb.pdf"
   end
 end

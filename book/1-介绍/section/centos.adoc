@@ -1,9 +1,9 @@
 === CentOS
 集群中的作用：*[red]#操作系统#*
 
-image::image/centos_logo.png[caption="Figure 1: ", title="CentOS", alt="CentOS"]
+image::image/centos_logo.jpg[caption="Figure 1: ", title="CentOS", alt="CentOS"]
 
-image::image/centos7_desktop.png[caption="Figure 2: ", title="CentOS 7 桌面", alt="CentOS 7 桌面"]
+image::image/centos7_desktop.jpg[caption="Figure 2: ", title="CentOS 7 桌面", alt="CentOS 7 桌面"]
 
 https://www.centos.org[CentOS] 是一个由社区支持的发行版本，它是由Red Hat公开的Red Hat Enterprise Linux（RHEL）源代码所衍
 生出来的。因此，CentOS Linux以兼容 RHEL的功能为目标。CentOS计划对组件的修改主要是去除上游提供者的商标及美工图。CentOS是

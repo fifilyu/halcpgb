@@ -1,3 +1,3 @@
 === DB高可用(LVS+Keepalived，无负载均衡)
 
-image::image/4-DB高可用.png[caption="Figure 4: ", title="DB高可用(LVS+Keepalived，无负载均衡)", alt="DB高可用(LVS+Keepalived，无负载均衡)", width="600"]
+image::image/4-DB高可用.jpg[caption="Figure 4: ", title="DB高可用(LVS+Keepalived，无负载均衡)", alt="DB高可用(LVS+Keepalived，无负载均衡)", width="600"]

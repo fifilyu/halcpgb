@@ -1,7 +1,7 @@
 === Nginx
 集群中的作用：*[red]#Web 服务器#*
 
-image::image/nginx_logo.png[alt="CentOS", width="200", height="48"]
+image::image/nginx_logo.jpg[alt="CentOS", width="200", height="48"]
 
 http://nginx.org[Nginx] 是一个HTTP、反向代理、邮件代理、TCP代理服务器。很长一段时间里，许多大访问量的俄罗斯网站都运行于Nginx之上。2015年7月，Nginx服务或代理了最繁忙站点中的22.27%。
 

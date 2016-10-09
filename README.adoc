@@ -8,11 +8,13 @@ High-Availability Loadbalancing Clusters Practice Guide for Beginners
 
 == 如何生成本书
 
-如果您运行下面的命令，获得 HTML 输出文件：
+如果您运行下面的命令，获得HTML和PDF输出文件：
 
 ----
 $ bundle install
 $ bundle exec rake book:build
 Converting to HTML...
  -- HTML output at halcpgb.html
+Converting to PDF...
+ -- PDF output at halcpgb.pdf
 ----

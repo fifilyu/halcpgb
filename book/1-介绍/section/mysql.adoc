@@ -1,7 +1,7 @@
 === MySQL
 集群中的作用：*[red]#数据库#*
 
-image::image/mysql_logo.png[MySQL]
+image::image/mysql_logo.jpg[MySQL]
 
 http://www.mysql.com[MySQL] 是一个关系型数据库管理系统，由瑞典MySQL AB公司开发，目前属于Oracle公司。体积小、使用简单、容
 易维护、高性能、成熟稳定以及开放源码等特点使MySQL成为大多数人的首选。特别是Linux+Apache/Nginx+MySQL+PHP(LAMP/LNMP)这样的

@@ -1,10 +1,18 @@
-= 高可用负载均衡集群实践简明教程
-
-:doctype:   book
+= 高可用负载均衡集群实践简明教程: High-Availability Loadbalancing Clusters Practice Guide for Beginners
+Fifi Lyu <fifilyu@gmail.com>
+v1.0.28, 2016-10-09
 :docinfo:
-:toc: left
+:doctype: book
+:iconfont-name: font-awesome
+:iconfont-remote!:
+:icons: font
 :numbered:
+:source-highlighter: highlightjs
+:stylesdir: css
+:stylesheet: asciidoctor.css
+:toc: left
 :toclevels: 2
+:toc-title: 目录
 
 include::book/前言.adoc[]
 

@@ -8,7 +8,7 @@ http://www.linuxvirtualserver.org[Linux Virtual Server (LVS)] 是一个建立在
 
 工作原理分别如下：
 
-image::image/lvs.png[LVS 工作原理]
+image::image/lvs.jpg[LVS 工作原理]
 
 由于LVS的成功，从Linux 2.4内核开始，LVS已经被合并到了内核代码中。
 

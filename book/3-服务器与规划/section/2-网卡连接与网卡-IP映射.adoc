@@ -1,3 +1,3 @@
 === 网卡连接与网卡-IP映射
 
-image::image/2-网卡连接与网卡-IP映射.png[caption="Figure 2: ", title="网卡连接与网卡-IP映射", alt="网卡连接与网卡-IP映射", width="600"]
+image::image/2-网卡连接与网卡-IP映射.jpg[caption="Figure 2: ", title="网卡连接与网卡-IP映射", alt="网卡连接与网卡-IP映射", width="600"]
